@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Input, Table, message } from "antd";
+import { Input, Table, Tag, message } from "antd";
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 import toast from "react-hot-toast";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
+import AccountSuspensionAction from "../AccountSuspensionAction";
+import { isSuspensionActive } from "../../utils/accountSuspension";
 
 const Parents = () => {
   const [users, setUsers] = useState([]);
@@ -33,12 +35,34 @@ const Parents = () => {
       sorter: (a, b) => a.phone_number.localeCompare(b.phone_number),
     },
     {
+      title: "Status",
+      key: "status",
+      width: 120,
+      render: (_, user) =>
+        isSuspensionActive(user) ? <Tag color="error">Suspended</Tag> : <Tag color="success">Active</Tag>,
+    },
+    {
       title: "Created At",
       dataIndex: "created_at",
       key: "created_at",
       width: 210,
       render: (text) => new Date(text).toLocaleString(),
       sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at),
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      width: 120,
+      fixed: "right",
+      render: (_, user) => (
+        <AccountSuspensionAction
+          accountType="parent"
+          account={user}
+          onUpdated={(id, changes) =>
+            setUsers((current) => current.map((item) => item.user_id === id ? { ...item, ...changes } : item))
+          }
+        />
+      ),
     },
   ];
 

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Table, message, Image, Button, Input } from "antd";
+import { Table, message, Image, Button, Input, Tag } from "antd";
 import { PlusOutlined, SearchOutlined, ShopOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
+import AccountSuspensionAction from "../AccountSuspensionAction";
+import { isSuspensionActive } from "../../utils/accountSuspension";
 
 const Partners = () => {
   const [partners, setPartners] = useState([]);
@@ -65,14 +67,6 @@ const Partners = () => {
       ),
     },
     {
-      title: "Region",
-      dataIndex: "region",
-      key: "region",
-      width: 120,
-      ellipsis: true,
-      sorter: (a, b) => a.region.localeCompare(b.region),
-    },
-    {
       title: "Rating",
       dataIndex: "rating",
       key: "rating",
@@ -90,12 +84,34 @@ const Partners = () => {
         String(categories || "").replace(/{|}/g, "") || "—",
     },
     {
+      title: "Status",
+      key: "status",
+      width: 120,
+      render: (_, partner) =>
+        isSuspensionActive(partner) ? <Tag color="error">Suspended</Tag> : <Tag color="success">Active</Tag>,
+    },
+    {
       title: "Created On",
       dataIndex: "created_at",
       key: "created_at",
       width: 200,
       render: (text) => new Date(text).toLocaleString(),
       sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at),
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      width: 120,
+      fixed: "right",
+      render: (_, partner) => (
+        <AccountSuspensionAction
+          accountType="partner"
+          account={partner}
+          onUpdated={(id, changes) =>
+            setPartners((current) => current.map((item) => item.partner_id === id ? { ...item, ...changes } : item))
+          }
+        />
+      ),
     },
   ];
 
@@ -132,7 +148,6 @@ const Partners = () => {
           partner.partner_name,
           partner.email,
           partner.contact_number,
-          partner.region,
           partner.categories,
         ].some((value) =>
           String(value || "")

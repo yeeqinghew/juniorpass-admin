@@ -22,7 +22,7 @@ const Children = () => {
 
         const data = await response.json();
         setChildren(data);
-      } catch (err) {
+      } catch {
         toast.error("Error loading children data");
       } finally {
         setLoading(false);

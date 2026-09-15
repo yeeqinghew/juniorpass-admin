@@ -12,6 +12,7 @@ import {
   FormOutlined,
   SettingOutlined,
   TagsOutlined,
+  ReadOutlined,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -65,6 +66,7 @@ const AdminHomeLayout = () => {
     "/home": { key: "home", title: "Dashboard" },
     "/parents": { key: "parents", title: "Parents" },
     "/children": { key: "children", title: "Children" },
+    "/classes": { key: "classes", title: "Classes" },
     "/partners": { key: "partners", title: "Partners" },
     "/create-partner": { key: "partners", title: "Invite Partner" },
     "/partner-enquiries": { key: "enquiries", title: "Partner Enquiries" },
@@ -79,6 +81,7 @@ const AdminHomeLayout = () => {
       home: "/home",
       parents: "/parents",
       children: "/children",
+      classes: "/classes",
       partners: "/partners",
       enquiries: "/partner-enquiries",
       settings: "/settings",
@@ -152,6 +155,11 @@ const AdminHomeLayout = () => {
               key: "home",
               icon: <HomeOutlined className="sidebar-menu-icon" />,
               label: <span className="sidebar-menu-label">Dashboard</span>,
+            },
+            {
+              key: "classes",
+              icon: <ReadOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Classes</span>,
             },
             {
               key: "parents",

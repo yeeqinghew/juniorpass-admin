@@ -44,8 +44,6 @@ const CreatePartner = () => {
         throw new Error(error.message || "Failed to send invitation");
       }
 
-      const data = await response.json();
-
       message.success(
         "Invitation sent successfully! The partner will receive an email with login credentials."
       );

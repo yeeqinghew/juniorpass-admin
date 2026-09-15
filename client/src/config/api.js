@@ -22,6 +22,8 @@ export const API_ENDPOINTS = {
 
   // Parents
   GET_ALL_PARENTS: `${API_BASE_URL}/admins/getAllParents`,
+  UPDATE_ACCOUNT_SUSPENSION: (accountType, accountId) =>
+    `${API_BASE_URL}/admins/accounts/${accountType}/${accountId}/suspension`,
 
   // Children
   GET_ALL_CHILDREN: `${API_BASE_URL}/admins/getAllChildren`,
@@ -31,6 +33,13 @@ export const API_ENDPOINTS = {
   CREATE_PARTNER: `${API_BASE_URL}/admins/createPartner`, // Now sends invitation email
   UPDATE_PARTNER: (partnerId) => `${API_BASE_URL}/admins/updatePartner/${partnerId}`,
   DELETE_PARTNER: (partnerId) => `${API_BASE_URL}/admins/deletePartner/${partnerId}`,
+
+  // Classes and operations
+  GET_ALL_CLASSES: `${API_BASE_URL}/admins/listings`,
+  APPROVE_CLASS: (listingId) =>
+    `${API_BASE_URL}/admins/listings/${listingId}/approve`,
+  REJECT_CLASS: (listingId) =>
+    `${API_BASE_URL}/admins/listings/${listingId}/reject`,
 
   // Partner Enquiries
   GET_ALL_PARTNER_ENQUIRIES: `${API_BASE_URL}/admins/getAllPartnerEnquiries`,
