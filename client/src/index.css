@@ -22,6 +22,26 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Keep third-party Ant Design surfaces on the same portal typeface. */
+[class^='ant-'],
+[class*=' ant-'] {
+  font-family: var(--font-family-base) !important;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: var(--font-family-mono) !important;
+}
+
 /* Ant Design Overrides */
 .ant-table {
   font-size: var(--font-size-sm);

@@ -167,7 +167,6 @@ const CreatePartner = () => {
                 <strong>Profile Setup:</strong> Partner completes their organization profile:
                 <ul className="profile-fields">
                   <li>Organization name & description</li>
-                  <li>Headquarters address & region</li>
                   <li>Contact number & website</li>
                   <li>Upload logo</li>
                   <li>Select service categories</li>

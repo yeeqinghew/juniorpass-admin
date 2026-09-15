@@ -19,7 +19,6 @@ const AdminLandingLayout = () => {
           // Alias
           colorBgContainer: "#FCFBF8",
           fontSize: 14,
-          fontFamily: "Poppins, sans-serif",
         },
         components: {
           Layout: {
