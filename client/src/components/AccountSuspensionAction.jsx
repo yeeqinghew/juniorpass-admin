@@ -9,6 +9,7 @@ const { Text } = Typography;
 
 const AccountSuspensionAction = ({ accountType, account, onUpdated }) => {
   const [open, setOpen] = useState(false);
+  const [restoreOpen, setRestoreOpen] = useState(false);
   const [reason, setReason] = useState("");
   const [expiresAt, setExpiresAt] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -42,6 +43,7 @@ const AccountSuspensionAction = ({ accountType, account, onUpdated }) => {
       if (!response.ok) throw new Error(data.error || "Unable to update account");
       onUpdated(accountId, data);
       setOpen(false);
+      setRestoreOpen(false);
       setReason("");
       setExpiresAt(null);
       setUpcomingBookings(0);
@@ -53,21 +55,26 @@ const AccountSuspensionAction = ({ accountType, account, onUpdated }) => {
     }
   };
 
-  const restore = () => {
-    Modal.confirm({
-      title: "Restore this account?",
-      content: "The account will regain portal access immediately.",
-      okText: "Restore account",
-      centered: true,
-      onOk: () => updateSuspension(false, true),
-    });
-  };
-
   return (
     <>
-      <Button danger={!active} type={active ? "default" : "link"} onClick={active ? restore : () => setOpen(true)}>
+      <Button
+        danger={!active}
+        type={active ? "default" : "link"}
+        onClick={active ? () => setRestoreOpen(true) : () => setOpen(true)}
+      >
         {active ? "Restore" : "Suspend"}
       </Button>
+      <Modal
+        title="Restore this account?"
+        open={restoreOpen}
+        okText="Restore account"
+        confirmLoading={loading}
+        onOk={() => updateSuspension(false)}
+        onCancel={() => setRestoreOpen(false)}
+        centered
+      >
+        <Text>The account will regain portal access immediately.</Text>
+      </Modal>
       <Modal
         title={`Suspend ${accountType} account`}
         open={open}

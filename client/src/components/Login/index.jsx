@@ -9,7 +9,7 @@ import {
   ArrowRightOutlined,
 } from "@ant-design/icons";
 import { Button, Form, Input, Typography } from "antd";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import logo from "../../images/logopngResize.png";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
@@ -46,7 +46,6 @@ const AdminLogin = () => {
 
   return (
     <section className="admin-login-page">
-      <Toaster />
       <div className="admin-login-card fade-in">
         <div className="admin-login-header">
           <Image
