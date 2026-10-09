@@ -8,6 +8,7 @@ import CreatePartner from "../components/Partners/CreatePartner";
 import Parents from "../components/Users/Parents";
 import Children from "../components/Users/Children";
 import Classes from "../components/Classes";
+import Bookings from "../components/Bookings";
 import PartnerEnquiries from "../components/PartnerEnquiries";
 import Settings from "../components/Settings";
 import Categories from "../components/Categories";
@@ -23,6 +24,7 @@ const Routers = () => {
           <Route path="parents" element={<Parents />}></Route>
           <Route path="children" element={<Children />}></Route>
           <Route path="classes" element={<Classes />}></Route>
+          <Route path="bookings" element={<Bookings />}></Route>
           <Route path="partners" element={<Partners />}></Route>
           <Route path="settings" element={<Settings />}></Route>
           <Route path="categories" element={<Categories />}></Route>

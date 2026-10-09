@@ -36,6 +36,7 @@ export const API_ENDPOINTS = {
 
   // Classes and operations
   GET_ALL_CLASSES: `${API_BASE_URL}/admins/listings`,
+  GET_ADMIN_BOOKINGS: `${API_BASE_URL}/admins/bookings`,
   APPROVE_CLASS: (listingId) =>
     `${API_BASE_URL}/admins/listings/${listingId}/approve`,
   REJECT_CLASS: (listingId) =>

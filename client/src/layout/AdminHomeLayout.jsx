@@ -13,6 +13,7 @@ import {
   SettingOutlined,
   TagsOutlined,
   ReadOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -67,6 +68,7 @@ const AdminHomeLayout = () => {
     "/parents": { key: "parents", title: "Parents" },
     "/children": { key: "children", title: "Children" },
     "/classes": { key: "classes", title: "Classes" },
+    "/bookings": { key: "bookings", title: "Bookings" },
     "/partners": { key: "partners", title: "Partners" },
     "/create-partner": { key: "partners", title: "Invite Partner" },
     "/partner-enquiries": { key: "enquiries", title: "Partner Enquiries" },
@@ -82,6 +84,7 @@ const AdminHomeLayout = () => {
       parents: "/parents",
       children: "/children",
       classes: "/classes",
+      bookings: "/bookings",
       partners: "/partners",
       enquiries: "/partner-enquiries",
       settings: "/settings",
@@ -160,6 +163,11 @@ const AdminHomeLayout = () => {
               key: "classes",
               icon: <ReadOutlined className="sidebar-menu-icon" />,
               label: <span className="sidebar-menu-label">Classes</span>,
+            },
+            {
+              key: "bookings",
+              icon: <CalendarOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Bookings</span>,
             },
             {
               key: "parents",
