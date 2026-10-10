@@ -21,6 +21,7 @@ import {
   EyeOutlined,
   SafetyCertificateOutlined,
   SyncOutlined,
+  SwapOutlined,
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -166,6 +167,11 @@ const formatPackageName = (value) =>
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
+
+const titleCase = (value) =>
+  String(value || "")
+    .replaceAll("_", " ")
+    .replace(/(^|\s)\S/g, (letter) => letter.toUpperCase());
 
 const formatBookingReference = (value) =>
   value ? `#${String(value).slice(0, 8).toUpperCase()}` : "—";
@@ -555,6 +561,50 @@ const Bookings = () => {
                 </div>
               </dl>
             </section>
+
+            {selectedBooking.makeup_requests?.length > 0 && (
+              <section className="admin-booking-detail-section">
+                <div className="admin-booking-section-heading">
+                  <SwapOutlined />
+                  <div>
+                    <h3>Make-up request history</h3>
+                    <p>Parent requests and partner responses for this booking</p>
+                  </div>
+                </div>
+                <div className="admin-makeup-requests">
+                  {selectedBooking.makeup_requests.map((request) => (
+                    <article className="admin-makeup-request" key={request.request_id}>
+                      <div className="admin-makeup-request-heading">
+                        <strong>{formatDateTime(request.original_start_date)}</strong>
+                        <Tag className={`admin-makeup-status is-${request.status}`}>
+                          {titleCase(request.status)}
+                        </Tag>
+                      </div>
+                      <dl className="admin-booking-detail-list">
+                        <div>
+                          <dt>Requested</dt>
+                          <dd>{formatDateTime(request.created_at)}</dd>
+                        </div>
+                        <div>
+                          <dt>Offered date</dt>
+                          <dd>{formatDateTime(request.offered_start_date)}</dd>
+                        </div>
+                        <div className="admin-booking-detail-wide">
+                          <dt>Parent reason</dt>
+                          <dd>{request.reason || "No reason provided"}</dd>
+                        </div>
+                        {request.partner_response && (
+                          <div className="admin-booking-detail-wide">
+                            <dt>Partner response</dt>
+                            <dd>{request.partner_response}</dd>
+                          </div>
+                        )}
+                      </dl>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )}
 
             <section className="admin-booking-detail-section">
               <div className="admin-booking-section-heading">
