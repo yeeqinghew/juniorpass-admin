@@ -19,6 +19,7 @@ import {
   CreditCardOutlined,
   EnvironmentOutlined,
   EyeOutlined,
+  SafetyCertificateOutlined,
   SyncOutlined,
   TeamOutlined,
   UserOutlined,
@@ -45,6 +46,32 @@ const STATUS_OPTIONS = [
   { label: "Completed", value: "completed" },
   { label: "Cancelled", value: "cancelled" },
 ];
+
+const getBookingPolicy = (booking) => {
+  let snapshot = booking?.policy_snapshot;
+  if (typeof snapshot === "string") {
+    try {
+      snapshot = JSON.parse(snapshot);
+    } catch {
+      snapshot = null;
+    }
+  }
+
+  return {
+    cancellation_notice_hours: Number(
+      snapshot?.cancellation_notice_hours ?? 24,
+    ),
+    refund_before_deadline_percent: Number(
+      snapshot?.refund_before_deadline_percent ?? 100,
+    ),
+    refund_after_deadline_percent: Number(
+      snapshot?.refund_after_deadline_percent ?? 0,
+    ),
+    makeup_allowed: snapshot?.makeup_allowed === true,
+    makeup_notice_hours: Number(snapshot?.makeup_notice_hours ?? 24),
+    class_requirements: snapshot?.class_requirements || "",
+  };
+};
 
 const getStatusPresentation = (status) => {
   switch (status) {
@@ -337,6 +364,13 @@ const Bookings = () => {
         0,
       ))
     : 0;
+  const selectedPolicy = getBookingPolicy(selectedBooking);
+  const cancellationDeadline = selectedBooking
+    ? new Date(
+        new Date(selectedBooking.start_date).getTime() -
+          selectedPolicy.cancellation_notice_hours * 60 * 60 * 1000,
+      )
+    : null;
 
   return (
     <div className="page-container admin-bookings-page">
@@ -595,6 +629,63 @@ const Bookings = () => {
                     )}
                   </dd>
                 </div>
+                {selectedBooking.status === "cancelled" && (
+                  <>
+                    <div>
+                      <dt>Credits refunded</dt>
+                      <dd>{formatCredits(selectedBooking.refunded_credits)}</dd>
+                    </div>
+                    <div>
+                      <dt>Cancelled</dt>
+                      <dd>{formatDateTime(selectedBooking.cancelled_at)}</dd>
+                    </div>
+                  </>
+                )}
+              </dl>
+            </section>
+
+            <section className="admin-booking-detail-section">
+              <div className="admin-booking-section-heading">
+                <SafetyCertificateOutlined />
+                <div>
+                  <h3>Booking policy</h3>
+                  <p>Terms captured when the booking was confirmed</p>
+                </div>
+              </div>
+              <dl className="admin-booking-detail-list">
+                <div>
+                  <dt>Cancellation deadline</dt>
+                  <dd>{formatDateTime(cancellationDeadline)}</dd>
+                </div>
+                <div>
+                  <dt>Refund before deadline</dt>
+                  <dd>{selectedPolicy.refund_before_deadline_percent}%</dd>
+                </div>
+                <div>
+                  <dt>Refund after deadline</dt>
+                  <dd>{selectedPolicy.refund_after_deadline_percent}%</dd>
+                </div>
+                <div>
+                  <dt>Make-up requests</dt>
+                  <dd>
+                    {selectedPolicy.makeup_allowed
+                      ? `Allowed with ${selectedPolicy.makeup_notice_hours} hours’ notice`
+                      : "Not allowed"}
+                  </dd>
+                </div>
+                <div className="admin-booking-detail-wide">
+                  <dt>Class requirements</dt>
+                  <dd>
+                    {selectedPolicy.class_requirements ||
+                      "No additional requirements provided"}
+                  </dd>
+                </div>
+                {selectedBooking.cancellation_reason && (
+                  <div className="admin-booking-detail-wide">
+                    <dt>Cancellation reason</dt>
+                    <dd>{selectedBooking.cancellation_reason}</dd>
+                  </div>
+                )}
               </dl>
             </section>
 

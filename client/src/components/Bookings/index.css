@@ -265,6 +265,10 @@
   border-bottom: var(--border-width) solid var(--border-color-light);
 }
 
+.admin-booking-detail-list .admin-booking-detail-wide {
+  grid-column: 1 / -1;
+}
+
 .admin-booking-detail-list dt,
 .admin-booking-detail-list dd {
   display: block;
