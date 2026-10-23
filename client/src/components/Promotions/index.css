@@ -1,0 +1,128 @@
+.admin-promotions-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.admin-promotions-header,
+.admin-promotions-panel {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-card);
+  box-shadow: var(--shadow);
+}
+
+.admin-promotions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-8);
+}
+
+.admin-promotions-header h1.ant-typography {
+  margin: 4px 0;
+}
+
+.admin-promotions-kicker {
+  color: var(--color-primary-dark);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.admin-promotions-header-icon {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  font-size: var(--font-size-2xl);
+}
+
+.admin-promotions-panel {
+  min-height: 240px;
+  padding: var(--space-6);
+}
+
+.admin-promotions-toolbar,
+.admin-promotion-card-heading,
+.admin-promotion-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.admin-promotions-toolbar {
+  margin-bottom: var(--space-4);
+}
+
+.admin-promotion-list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.admin-promotion-card {
+  padding: var(--space-6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+.admin-promotion-card-heading > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-promotion-card-heading span,
+.admin-promotion-metrics span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.admin-promotion-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-6) 0;
+}
+
+.admin-promotion-metrics > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-promotion-actions {
+  justify-content: flex-end;
+  margin-top: var(--space-4);
+}
+
+.admin-promotions-loading {
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.admin-promotion-modal .ant-select {
+  width: 100%;
+  margin-bottom: var(--space-4);
+}
+
+@media screen and (max-width: 767.9px) {
+  .admin-promotions-header,
+  .admin-promotion-card-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-promotion-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-promotions-header,
+  .admin-promotions-panel,
+  .admin-promotion-card {
+    padding: var(--space-4);
+  }
+}

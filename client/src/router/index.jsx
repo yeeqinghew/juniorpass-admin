@@ -12,6 +12,8 @@ import Bookings from "../components/Bookings";
 import PartnerEnquiries from "../components/PartnerEnquiries";
 import Settings from "../components/Settings";
 import Categories from "../components/Categories";
+import Reviews from "../components/Reviews";
+import Promotions from "../components/Promotions";
 
 const Routers = () => {
   return (
@@ -25,6 +27,8 @@ const Routers = () => {
           <Route path="children" element={<Children />}></Route>
           <Route path="classes" element={<Classes />}></Route>
           <Route path="bookings" element={<Bookings />}></Route>
+          <Route path="reviews" element={<Reviews />}></Route>
+          <Route path="promotions" element={<Promotions />}></Route>
           <Route path="partners" element={<Partners />}></Route>
           <Route path="settings" element={<Settings />}></Route>
           <Route path="categories" element={<Categories />}></Route>

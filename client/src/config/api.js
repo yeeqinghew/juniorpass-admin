@@ -37,6 +37,12 @@ export const API_ENDPOINTS = {
   // Classes and operations
   GET_ALL_CLASSES: `${API_BASE_URL}/admins/listings`,
   GET_ADMIN_BOOKINGS: `${API_BASE_URL}/admins/bookings`,
+  GET_REVIEWS: `${API_BASE_URL}/reviews/admin/all`,
+  MODERATE_REVIEW: (reviewId) =>
+    `${API_BASE_URL}/reviews/${reviewId}/moderation`,
+  GET_PROMOTIONS: `${API_BASE_URL}/promotions/admin`,
+  REVIEW_PROMOTION: (promotionId) =>
+    `${API_BASE_URL}/promotions/admin/${promotionId}/review`,
   APPROVE_CLASS: (listingId) =>
     `${API_BASE_URL}/admins/listings/${listingId}/approve`,
   REJECT_CLASS: (listingId) =>

@@ -14,6 +14,8 @@ import {
   TagsOutlined,
   ReadOutlined,
   CalendarOutlined,
+  StarOutlined,
+  PercentageOutlined,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -69,6 +71,8 @@ const AdminHomeLayout = () => {
     "/children": { key: "children", title: "Children" },
     "/classes": { key: "classes", title: "Classes" },
     "/bookings": { key: "bookings", title: "Bookings" },
+    "/reviews": { key: "reviews", title: "Reviews" },
+    "/promotions": { key: "promotions", title: "Promotions" },
     "/partners": { key: "partners", title: "Partners" },
     "/create-partner": { key: "partners", title: "Invite Partner" },
     "/partner-enquiries": { key: "enquiries", title: "Partner Enquiries" },
@@ -85,6 +89,8 @@ const AdminHomeLayout = () => {
       children: "/children",
       classes: "/classes",
       bookings: "/bookings",
+      reviews: "/reviews",
+      promotions: "/promotions",
       partners: "/partners",
       enquiries: "/partner-enquiries",
       settings: "/settings",
@@ -168,6 +174,16 @@ const AdminHomeLayout = () => {
               key: "bookings",
               icon: <CalendarOutlined className="sidebar-menu-icon" />,
               label: <span className="sidebar-menu-label">Bookings</span>,
+            },
+            {
+              key: "reviews",
+              icon: <StarOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Reviews</span>,
+            },
+            {
+              key: "promotions",
+              icon: <PercentageOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Promotions</span>,
             },
             {
               key: "parents",

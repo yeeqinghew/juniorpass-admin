@@ -74,6 +74,18 @@ const getBookingPolicy = (booking) => {
   };
 };
 
+const getAuthorizedPickups = (booking) => {
+  const pickups = booking?.authorized_pickups;
+  if (Array.isArray(pickups)) return pickups;
+  if (typeof pickups !== "string") return [];
+  try {
+    const parsed = JSON.parse(pickups);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
 const getStatusPresentation = (status) => {
   switch (status) {
     case "upcoming":
@@ -371,6 +383,7 @@ const Bookings = () => {
       ))
     : 0;
   const selectedPolicy = getBookingPolicy(selectedBooking);
+  const selectedAuthorizedPickups = getAuthorizedPickups(selectedBooking);
   const cancellationDeadline = selectedBooking
     ? new Date(
         new Date(selectedBooking.start_date).getTime() -
@@ -558,6 +571,59 @@ const Bookings = () => {
                 <div>
                   <dt>Age</dt>
                   <dd>{childAge === null ? "Not available" : `${childAge} years`}</dd>
+                </div>
+              </dl>
+            </section>
+
+            <section className="admin-booking-detail-section">
+              <div className="admin-booking-section-heading">
+                <SafetyCertificateOutlined />
+                <div>
+                  <h3>Child safety information</h3>
+                  <p>Visible only to authorised staff supporting this booking</p>
+                </div>
+              </div>
+              <dl className="admin-booking-detail-list">
+                <div>
+                  <dt>Emergency contact</dt>
+                  <dd>
+                    {selectedBooking.emergency_contact_name || "Not provided"}
+                    {selectedBooking.emergency_contact_relationship
+                      ? ` · ${selectedBooking.emergency_contact_relationship}`
+                      : ""}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Emergency phone</dt>
+                  <dd>{selectedBooking.emergency_contact_phone || "Not provided"}</dd>
+                </div>
+                <div className="admin-booking-detail-wide">
+                  <dt>Allergies, medical and care notes</dt>
+                  <dd className="admin-booking-safety-notes">
+                    {selectedBooking.child_safety_notes || "None declared"}
+                  </dd>
+                </div>
+                <div className="admin-booking-detail-wide">
+                  <dt>Authorised pickup people</dt>
+                  <dd>
+                    {selectedAuthorizedPickups.length > 0
+                      ? selectedAuthorizedPickups
+                          .map((pickup) =>
+                            [pickup.name, pickup.relationship, pickup.phone]
+                              .filter(Boolean)
+                              .join(" · "),
+                          )
+                          .join("; ")
+                      : "Not provided"}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Safety details updated</dt>
+                  <dd>{formatDateTime(selectedBooking.safety_updated_at)}</dd>
+                </div>
+                <div>
+                  <dt>Acknowledgement accepted</dt>
+                  <dd>{formatDateTime(selectedBooking.waiver_acknowledged_at)}</dd>
                 </div>
               </dl>
             </section>
