@@ -59,6 +59,16 @@ export const API_ENDPOINTS = {
   UPDATE_CATEGORY: (categoryId) => `${API_BASE_URL}/categories/${categoryId}`,
 
   CREDIT_CONVERSION: `${API_BASE_URL}/admins/settings/credit-conversion`,
+
+  // Partner payouts
+  GET_PAYOUTS: `${API_BASE_URL}/payouts/admin`,
+  CREATE_PAYOUT: `${API_BASE_URL}/payouts/admin`,
+  MARK_PAYOUT_PAID: (payoutId) =>
+    `${API_BASE_URL}/payouts/admin/${payoutId}/paid`,
+  VOID_PAYOUT: (payoutId) =>
+    `${API_BASE_URL}/payouts/admin/${payoutId}/void`,
+  PAYOUT_STATEMENT: (payoutId, format = "") =>
+    `${API_BASE_URL}/payouts/${payoutId}/statement${format ? `.${format}` : ""}`,
 };
 
 // Helper function for authenticated fetch

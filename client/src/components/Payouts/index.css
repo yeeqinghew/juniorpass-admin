@@ -1,0 +1,137 @@
+.admin-payouts-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.admin-payouts-header,
+.admin-payouts-panel,
+.admin-payout-summary article {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-card);
+  box-shadow: var(--shadow);
+}
+
+.admin-payouts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-8);
+}
+
+.admin-payouts-header h1.ant-typography,
+.admin-payouts-panel h3.ant-typography {
+  margin: var(--space-1) 0;
+}
+
+.admin-payouts-kicker {
+  color: var(--color-primary-dark);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.admin-payout-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.admin-payout-summary article {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-6);
+}
+
+.admin-payout-summary article > .anticon {
+  grid-row: 1 / span 3;
+  padding: var(--space-3);
+  color: var(--color-primary-dark);
+  background: var(--color-primary-light);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-xl);
+}
+
+.admin-payout-summary span,
+.admin-payout-summary small,
+.payout-partner-cell span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.admin-payout-summary strong {
+  font-size: var(--font-size-2xl);
+}
+
+.admin-payouts-panel {
+  padding: var(--space-6);
+}
+
+.admin-payouts-panel-heading {
+  margin-bottom: var(--space-5);
+}
+
+.payout-partner-cell {
+  display: flex;
+  flex-direction: column;
+  min-width: 170px;
+}
+
+.admin-payout-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  min-width: 280px;
+}
+
+.admin-payout-status {
+  border-radius: var(--border-radius-xl);
+  text-transform: capitalize;
+}
+
+.admin-payout-status.is-draft {
+  color: var(--color-warning);
+  background: var(--color-warning-light);
+  border-color: var(--color-warning);
+}
+
+.admin-payout-status.is-paid {
+  color: var(--color-success);
+  background: var(--color-success-light);
+  border-color: var(--color-success);
+}
+
+.admin-payout-status.is-void {
+  color: var(--color-error);
+  background: var(--color-error-light);
+  border-color: var(--color-error);
+}
+
+.admin-payout-form {
+  margin-top: var(--space-5);
+}
+
+.admin-payout-form .ant-picker,
+.admin-payout-form .ant-select {
+  width: 100%;
+}
+
+@media screen and (max-width: 767.9px) {
+  .admin-payouts-header {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: var(--space-5);
+  }
+
+  .admin-payout-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-payouts-panel {
+    padding: var(--space-4);
+  }
+}

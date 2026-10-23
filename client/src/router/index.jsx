@@ -14,6 +14,7 @@ import Settings from "../components/Settings";
 import Categories from "../components/Categories";
 import Reviews from "../components/Reviews";
 import Promotions from "../components/Promotions";
+import Payouts from "../components/Payouts";
 
 const Routers = () => {
   return (
@@ -29,6 +30,7 @@ const Routers = () => {
           <Route path="bookings" element={<Bookings />}></Route>
           <Route path="reviews" element={<Reviews />}></Route>
           <Route path="promotions" element={<Promotions />}></Route>
+          <Route path="payouts" element={<Payouts />}></Route>
           <Route path="partners" element={<Partners />}></Route>
           <Route path="settings" element={<Settings />}></Route>
           <Route path="categories" element={<Categories />}></Route>

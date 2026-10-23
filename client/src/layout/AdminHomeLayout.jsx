@@ -16,6 +16,7 @@ import {
   CalendarOutlined,
   StarOutlined,
   PercentageOutlined,
+  BankOutlined,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -73,6 +74,7 @@ const AdminHomeLayout = () => {
     "/bookings": { key: "bookings", title: "Bookings" },
     "/reviews": { key: "reviews", title: "Reviews" },
     "/promotions": { key: "promotions", title: "Promotions" },
+    "/payouts": { key: "payouts", title: "Partner Payouts" },
     "/partners": { key: "partners", title: "Partners" },
     "/create-partner": { key: "partners", title: "Invite Partner" },
     "/partner-enquiries": { key: "enquiries", title: "Partner Enquiries" },
@@ -91,6 +93,7 @@ const AdminHomeLayout = () => {
       bookings: "/bookings",
       reviews: "/reviews",
       promotions: "/promotions",
+      payouts: "/payouts",
       partners: "/partners",
       enquiries: "/partner-enquiries",
       settings: "/settings",
@@ -184,6 +187,11 @@ const AdminHomeLayout = () => {
               key: "promotions",
               icon: <PercentageOutlined className="sidebar-menu-icon" />,
               label: <span className="sidebar-menu-label">Promotions</span>,
+            },
+            {
+              key: "payouts",
+              icon: <BankOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Payouts</span>,
             },
             {
               key: "parents",
