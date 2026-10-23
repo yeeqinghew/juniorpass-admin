@@ -69,6 +69,9 @@ export const API_ENDPOINTS = {
     `${API_BASE_URL}/payouts/admin/${payoutId}/void`,
   PAYOUT_STATEMENT: (payoutId, format = "") =>
     `${API_BASE_URL}/payouts/${payoutId}/statement${format ? `.${format}` : ""}`,
+
+  // Payments and wallet audit workspace
+  ADMIN_PAYMENTS: `${API_BASE_URL}/admin-payments`,
 };
 
 // Helper function for authenticated fetch

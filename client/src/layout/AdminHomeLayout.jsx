@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  UploadOutlined,
   UserOutlined,
   TeamOutlined,
   LogoutOutlined,
@@ -17,6 +16,7 @@ import {
   StarOutlined,
   PercentageOutlined,
   BankOutlined,
+  CreditCardOutlined,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -75,6 +75,7 @@ const AdminHomeLayout = () => {
     "/reviews": { key: "reviews", title: "Reviews" },
     "/promotions": { key: "promotions", title: "Promotions" },
     "/payouts": { key: "payouts", title: "Partner Payouts" },
+    "/payments": { key: "payments", title: "Payments & Transactions" },
     "/partners": { key: "partners", title: "Partners" },
     "/create-partner": { key: "partners", title: "Invite Partner" },
     "/partner-enquiries": { key: "enquiries", title: "Partner Enquiries" },
@@ -94,6 +95,7 @@ const AdminHomeLayout = () => {
       reviews: "/reviews",
       promotions: "/promotions",
       payouts: "/payouts",
+      payments: "/payments",
       partners: "/partners",
       enquiries: "/partner-enquiries",
       settings: "/settings",
@@ -194,6 +196,11 @@ const AdminHomeLayout = () => {
               label: <span className="sidebar-menu-label">Payouts</span>,
             },
             {
+              key: "payments",
+              icon: <CreditCardOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Payments</span>,
+            },
+            {
               key: "parents",
               icon: <UserOutlined className="sidebar-menu-icon" />,
               label: <span className="sidebar-menu-label">Parents</span>,
@@ -226,15 +233,6 @@ const AdminHomeLayout = () => {
           ]}
         />
 
-        {(!collapsed || isMobile) && (
-          <div className="sidebar-footer">
-            <UploadOutlined />
-            <div>
-              <Text>Transactions</Text>
-              <small>Coming soon</small>
-            </div>
-          </div>
-        )}
       </Sider>
 
       {isMobile && mobileOpen && (
