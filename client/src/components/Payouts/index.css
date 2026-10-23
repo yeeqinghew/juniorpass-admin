@@ -115,6 +115,11 @@
   margin-top: var(--space-5);
 }
 
+.admin-payout-void-content {
+  display: grid;
+  gap: var(--space-4);
+}
+
 .admin-payout-form .ant-picker,
 .admin-payout-form .ant-select {
   width: 100%;

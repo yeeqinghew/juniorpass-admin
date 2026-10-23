@@ -45,6 +45,8 @@ const Payouts = () => {
   const [data, setData] = useState({ partners: [], payouts: [] });
   const [draftOpen, setDraftOpen] = useState(false);
   const [paidPayout, setPaidPayout] = useState(null);
+  const [voidingPayout, setVoidingPayout] = useState(null);
+  const [voidError, setVoidError] = useState("");
   const [draftForm] = Form.useForm();
   const [paidForm] = Form.useForm();
 
@@ -118,21 +120,24 @@ const Payouts = () => {
     }
   };
 
-  const voidPayout = (payout) => {
-    Modal.confirm({
-      title: "Void this payout draft?",
-      content: "Its session earnings will return to the available balance.",
-      okText: "Void draft",
-      okButtonProps: { danger: true },
-      async onOk() {
-        const response = await fetchWithAuth(API_ENDPOINTS.VOID_PAYOUT(payout.payout_id), {
-          method: "PATCH",
-        });
-        const payload = await response.json();
-        if (!response.ok) throw new Error(payload.error || "Unable to void payout");
-        await loadPayouts();
-      },
-    });
+  const confirmVoid = async () => {
+    if (!voidingPayout) return;
+    setSaving(true);
+    setVoidError("");
+    try {
+      const response = await fetchWithAuth(
+        API_ENDPOINTS.VOID_PAYOUT(voidingPayout.payout_id),
+        { method: "PATCH" },
+      );
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "Unable to void payout");
+      setVoidingPayout(null);
+      await loadPayouts();
+    } catch (requestError) {
+      setVoidError(requestError.message || "Unable to void payout");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const openStatement = async (payout, format = "") => {
@@ -193,7 +198,17 @@ const Payouts = () => {
                 setPaidPayout(payout);
                 paidForm.setFieldsValue({ paid_at: dayjs() });
               }}>Mark paid</Button>
-              <Button size="small" danger icon={<StopOutlined />} onClick={() => voidPayout(payout)}>Void</Button>
+              <Button
+                size="small"
+                danger
+                icon={<StopOutlined />}
+                onClick={() => {
+                  setVoidError("");
+                  setVoidingPayout(payout);
+                }}
+              >
+                Void
+              </Button>
             </>
           )}
         </div>
@@ -274,6 +289,32 @@ const Payouts = () => {
             <DatePicker showTime />
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        title="Void this payout draft?"
+        open={Boolean(voidingPayout)}
+        onCancel={() => {
+          setVoidingPayout(null);
+          setVoidError("");
+        }}
+        onOk={confirmVoid}
+        okText="Void draft"
+        okButtonProps={{ danger: true }}
+        confirmLoading={saving}
+        closable={!saving}
+        maskClosable={!saving}
+        destroyOnClose
+      >
+        <div className="admin-payout-void-content">
+          <Alert
+            type="warning"
+            showIcon
+            message="The draft will be cancelled"
+            description="Its session earnings will return to the available balance and can be included in a new payout."
+          />
+          {voidError && <Alert type="error" showIcon message={voidError} />}
+        </div>
       </Modal>
     </div>
   );
