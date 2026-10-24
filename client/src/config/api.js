@@ -79,6 +79,9 @@ export const API_ENDPOINTS = {
   MARK_NOTIFICATION_READ: (notificationId) =>
     `${API_BASE_URL}/notifications/${notificationId}/read`,
   MARK_ALL_NOTIFICATIONS_READ: `${API_BASE_URL}/notifications/read-all`,
+
+  // Immutable operational audit history
+  AUDIT_LOG: `${API_BASE_URL}/audit-log`,
 };
 
 // Helper function for authenticated fetch

@@ -1,0 +1,130 @@
+.audit-log-page {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.audit-log-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.audit-log-header h1 {
+  margin: var(--space-1) 0 var(--space-2);
+  color: var(--text-primary);
+  font-size: var(--font-size-3xl);
+}
+
+.audit-log-header p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.audit-log-kicker {
+  color: var(--color-primary-dark);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+}
+
+.audit-log-panel {
+  padding: var(--space-5);
+  overflow: hidden;
+  background: var(--bg-card);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.audit-log-toolbar {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) 210px 170px;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.audit-log-table {
+  overflow-x: auto;
+}
+
+.audit-actor {
+  display: grid;
+  min-width: 130px;
+  gap: 2px;
+}
+
+.audit-actor span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.audit-entity {
+  margin: 0;
+  border-radius: var(--border-radius-xl);
+  text-transform: capitalize;
+}
+
+.audit-entity.is-credit,
+.audit-entity.is-settlement {
+  color: var(--color-success);
+}
+
+.audit-entity.is-account {
+  color: var(--color-warning);
+}
+
+.audit-entity.is-class,
+.audit-entity.is-conversion_rate {
+  color: var(--color-primary-dark);
+}
+
+.audit-record-id {
+  display: block;
+  max-width: 190px;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.audit-event-details {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.audit-event-details h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.audit-event-details pre {
+  max-height: 260px;
+  margin: 0;
+  padding: var(--space-3);
+  overflow: auto;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 800px) {
+  .audit-log-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .audit-log-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .audit-log-panel {
+    padding: var(--space-4);
+  }
+}

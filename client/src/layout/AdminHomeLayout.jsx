@@ -17,6 +17,7 @@ import {
   PercentageOutlined,
   BankOutlined,
   CreditCardOutlined,
+  HistoryOutlined,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -140,6 +141,7 @@ const AdminHomeLayout = () => {
     "/payouts": { key: "payouts", title: "Partner Payouts" },
     "/payments": { key: "payments", title: "Payments & Transactions" },
     "/notifications": { key: "notifications", title: "Admin Notifications" },
+    "/audit-log": { key: "audit-log", title: "Audit Log" },
     "/partners": { key: "partners", title: "Partners" },
     "/create-partner": { key: "partners", title: "Invite Partner" },
     "/partner-enquiries": { key: "enquiries", title: "Partner Enquiries" },
@@ -164,6 +166,7 @@ const AdminHomeLayout = () => {
       enquiries: "/partner-enquiries",
       settings: "/settings",
       categories: "/categories",
+      "audit-log": "/audit-log",
     };
 
     if (routeMap[key]) {
@@ -329,6 +332,11 @@ const AdminHomeLayout = () => {
               key: "settings",
               icon: <SettingOutlined className="sidebar-menu-icon" />,
               label: <span className="sidebar-menu-label">Settings</span>,
+            },
+            {
+              key: "audit-log",
+              icon: <HistoryOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Audit Log</span>,
             },
           ]}
         />
