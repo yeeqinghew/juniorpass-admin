@@ -18,6 +18,7 @@ import {
   BankOutlined,
   CreditCardOutlined,
   HistoryOutlined,
+  UndoOutlined,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -140,6 +141,7 @@ const AdminHomeLayout = () => {
     "/promotions": { key: "promotions", title: "Promotions" },
     "/payouts": { key: "payouts", title: "Partner Payouts" },
     "/payments": { key: "payments", title: "Payments & Transactions" },
+    "/refunds": { key: "refunds", title: "Refund Management" },
     "/notifications": { key: "notifications", title: "Admin Notifications" },
     "/audit-log": { key: "audit-log", title: "Audit Log" },
     "/partners": { key: "partners", title: "Partners" },
@@ -162,6 +164,7 @@ const AdminHomeLayout = () => {
       promotions: "/promotions",
       payouts: "/payouts",
       payments: "/payments",
+      refunds: "/refunds",
       partners: "/partners",
       enquiries: "/partner-enquiries",
       settings: "/settings",
@@ -302,6 +305,11 @@ const AdminHomeLayout = () => {
               key: "payments",
               icon: <CreditCardOutlined className="sidebar-menu-icon" />,
               label: <span className="sidebar-menu-label">Payments</span>,
+            },
+            {
+              key: "refunds",
+              icon: <UndoOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Refunds</span>,
             },
             {
               key: "parents",

@@ -79,6 +79,12 @@ export const API_ENDPOINTS = {
   // Payments and wallet audit workspace
   ADMIN_PAYMENTS: `${API_BASE_URL}/admin-payments`,
 
+  // Controlled credit refunds
+  GET_REFUNDS: `${API_BASE_URL}/refunds/admin`,
+  CREATE_REFUND: `${API_BASE_URL}/refunds/admin`,
+  APPROVE_REFUND: (refundId) => `${API_BASE_URL}/refunds/admin/${refundId}/approve`,
+  REJECT_REFUND: (refundId) => `${API_BASE_URL}/refunds/admin/${refundId}/reject`,
+
   // Admin notifications
   NOTIFICATIONS: `${API_BASE_URL}/notifications`,
   NOTIFICATION_UNREAD_COUNT: `${API_BASE_URL}/notifications/unread-count?type=${AUTH_ROLES.ADMIN}`,

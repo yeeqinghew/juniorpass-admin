@@ -22,6 +22,7 @@ const ENTITY_OPTIONS = [
   { value: "conversion_rate", label: "Conversion rates" },
   { value: "settlement", label: "Settlements" },
   { value: "promotion", label: "Promotions" },
+  { value: "refund", label: "Refunds" },
 ];
 
 const ACTOR_OPTIONS = [

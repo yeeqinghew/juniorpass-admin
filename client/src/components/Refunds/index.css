@@ -1,0 +1,13 @@
+.refunds-page { display: flex; flex-direction: column; gap: var(--space-6); }
+.refunds-header, .refunds-panel { border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); background: var(--bg-card); box-shadow: var(--shadow); }
+.refunds-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-8); }
+.refunds-header h1.ant-typography { margin: 4px 0; }
+.refunds-eyebrow { color: var(--color-primary-dark); font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); letter-spacing: .5px; text-transform: uppercase; }
+.refunds-panel { overflow: hidden; }
+.refunds-toolbar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-5); border-bottom: 1px solid var(--border-color); }
+.refund-primary { display: flex; min-width: 180px; flex-direction: column; gap: 2px; }
+.refund-primary span { color: var(--text-secondary); font-size: var(--font-size-sm); overflow-wrap: anywhere; }
+.refund-actions, .refund-form-actions { display: flex; justify-content: flex-end; gap: var(--space-2); }
+.refund-form { margin-top: var(--space-5); }
+.refund-form .ant-input-number { width: 100%; }
+@media screen and (max-width: 767.9px) { .refunds-header { align-items: stretch; flex-direction: column; padding: var(--space-4); } .refunds-toolbar { align-items: stretch; flex-direction: column; } }
