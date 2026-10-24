@@ -72,6 +72,13 @@ export const API_ENDPOINTS = {
 
   // Payments and wallet audit workspace
   ADMIN_PAYMENTS: `${API_BASE_URL}/admin-payments`,
+
+  // Admin notifications
+  NOTIFICATIONS: `${API_BASE_URL}/notifications`,
+  NOTIFICATION_UNREAD_COUNT: `${API_BASE_URL}/notifications/unread-count?type=${AUTH_ROLES.ADMIN}`,
+  MARK_NOTIFICATION_READ: (notificationId) =>
+    `${API_BASE_URL}/notifications/${notificationId}/read`,
+  MARK_ALL_NOTIFICATIONS_READ: `${API_BASE_URL}/notifications/read-all`,
 };
 
 // Helper function for authenticated fetch

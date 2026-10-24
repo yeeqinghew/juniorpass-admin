@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   UserOutlined,
   TeamOutlined,
@@ -25,8 +25,10 @@ import {
   Avatar,
   Typography,
   Button,
+  Modal,
   Spin,
   Tooltip,
+  Badge,
 } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import logo from "../images/logopngResize.png";
@@ -42,6 +44,10 @@ const AdminHomeLayout = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authChecking, setAuthChecking] = useState(true);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const [sessionExpiresAt, setSessionExpiresAt] = useState(null);
+  const [sessionExpiryWarningOpen, setSessionExpiryWarningOpen] =
+    useState(false);
 
   useEffect(() => {
     let active = true;
@@ -51,7 +57,11 @@ const AdminHomeLayout = () => {
         const response = await fetchWithAuth(API_ENDPOINTS.VERIFY_AUTH);
         if (!response.ok) {
           navigate("/login", { replace: true });
+          return;
         }
+
+        const session = await response.json();
+        setSessionExpiresAt(session.expires_at || null);
       } catch (error) {
         console.error("Admin session verification failed:", error);
         navigate("/login", { replace: true });
@@ -66,6 +76,59 @@ const AdminHomeLayout = () => {
     };
   }, [navigate]);
 
+  const loadUnreadNotifications = useCallback(async () => {
+    try {
+      const response = await fetchWithAuth(
+        API_ENDPOINTS.NOTIFICATION_UNREAD_COUNT,
+      );
+      if (!response.ok) return;
+      const payload = await response.json();
+      setUnreadNotifications(payload.unread_count || 0);
+    } catch (error) {
+      console.error("Unable to load admin notification count:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (authChecking) return undefined;
+    loadUnreadNotifications();
+    const refreshTimer = window.setInterval(loadUnreadNotifications, 60000);
+    window.addEventListener(
+      "admin-notifications-changed",
+      loadUnreadNotifications,
+    );
+    return () => {
+      window.clearInterval(refreshTimer);
+      window.removeEventListener(
+        "admin-notifications-changed",
+        loadUnreadNotifications,
+      );
+    };
+  }, [authChecking, loadUnreadNotifications]);
+
+  useEffect(() => {
+    if (!sessionExpiresAt) return undefined;
+
+    const expiresAt = new Date(sessionExpiresAt).getTime();
+    if (Number.isNaN(expiresAt)) return undefined;
+
+    const warningDelay = Math.max(expiresAt - Date.now() - 15 * 60 * 1000, 0);
+    const expiryDelay = Math.max(expiresAt - Date.now(), 0);
+    const warningTimer = window.setTimeout(
+      () => setSessionExpiryWarningOpen(true),
+      warningDelay,
+    );
+    const expiryTimer = window.setTimeout(() => {
+      setSessionExpiryWarningOpen(false);
+      navigate("/login", { replace: true });
+    }, expiryDelay);
+
+    return () => {
+      window.clearTimeout(warningTimer);
+      window.clearTimeout(expiryTimer);
+    };
+  }, [navigate, sessionExpiresAt]);
+
   const routeDetails = {
     "/home": { key: "home", title: "Dashboard" },
     "/parents": { key: "parents", title: "Parents" },
@@ -76,6 +139,7 @@ const AdminHomeLayout = () => {
     "/promotions": { key: "promotions", title: "Promotions" },
     "/payouts": { key: "payouts", title: "Partner Payouts" },
     "/payments": { key: "payments", title: "Payments & Transactions" },
+    "/notifications": { key: "notifications", title: "Admin Notifications" },
     "/partners": { key: "partners", title: "Partners" },
     "/create-partner": { key: "partners", title: "Invite Partner" },
     "/partner-enquiries": { key: "enquiries", title: "Partner Enquiries" },
@@ -117,6 +181,16 @@ const AdminHomeLayout = () => {
     setCollapsed((value) => !value);
   };
 
+  const handleLogout = async () => {
+    try {
+      await fetchWithAuth(API_ENDPOINTS.LOGOUT, { method: "POST" });
+    } catch (error) {
+      console.error("Admin logout failed:", error);
+    } finally {
+      navigate("/login", { replace: true });
+    }
+  };
+
   if (authChecking) {
     return (
       <div className="admin-auth-loading">
@@ -127,6 +201,32 @@ const AdminHomeLayout = () => {
 
   return (
     <Layout className="admin-layout">
+      <Modal
+        centered
+        closable={false}
+        open={sessionExpiryWarningOpen}
+        title="Your session is ending soon"
+        footer={[
+          <Button
+            key="sign-out"
+            onClick={handleLogout}
+          >
+            Sign out now
+          </Button>,
+          <Button
+            key="continue"
+            type="primary"
+            onClick={() => setSessionExpiryWarningOpen(false)}
+          >
+            Continue working
+          </Button>,
+        ]}
+      >
+        <Text>
+          For security, you will be signed out in 15 minutes. Please save any
+          unfinished work.
+        </Text>
+      </Modal>
       <Sider
         collapsible
         collapsed={isMobile ? !mobileOpen : collapsed}
@@ -273,13 +373,16 @@ const AdminHomeLayout = () => {
 
           <div className="header-right">
             <Tooltip title="Notifications">
-              <Button
-                type="text"
-                shape="circle"
-                className="header-icon-button"
-                icon={<BellOutlined />}
-                aria-label="Notifications"
-              />
+              <Badge count={unreadNotifications} size="small" overflowCount={99}>
+                <Button
+                  type="text"
+                  shape="circle"
+                  className="header-icon-button"
+                  icon={<BellOutlined />}
+                  aria-label={`${unreadNotifications} unread notifications`}
+                  onClick={() => navigate("/notifications")}
+                />
+              </Badge>
             </Tooltip>
 
             <div className="header-identity">
@@ -301,17 +404,7 @@ const AdminHomeLayout = () => {
                 className="header-icon-button header-logout-button"
                 icon={<LogoutOutlined />}
                 aria-label="Sign out"
-                onClick={async () => {
-                  try {
-                    await fetchWithAuth(API_ENDPOINTS.LOGOUT, {
-                      method: "POST",
-                    });
-                  } catch (error) {
-                    console.error("Admin logout failed:", error);
-                  } finally {
-                    navigate("/login", { replace: true });
-                  }
-                }}
+                onClick={handleLogout}
               />
             </Tooltip>
           </div>

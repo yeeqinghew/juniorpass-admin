@@ -16,6 +16,7 @@ import Reviews from "../components/Reviews";
 import Promotions from "../components/Promotions";
 import Payouts from "../components/Payouts";
 import Payments from "../components/Payments";
+import Notifications from "../components/Notifications";
 
 const Routers = () => {
   return (
@@ -33,6 +34,7 @@ const Routers = () => {
           <Route path="promotions" element={<Promotions />}></Route>
           <Route path="payouts" element={<Payouts />}></Route>
           <Route path="payments" element={<Payments />}></Route>
+          <Route path="notifications" element={<Notifications />}></Route>
           <Route path="partners" element={<Partners />}></Route>
           <Route path="settings" element={<Settings />}></Route>
           <Route path="categories" element={<Categories />}></Route>
