@@ -128,7 +128,7 @@ const AdminLogin = () => {
         </Form>
 
         <div className="admin-login-footer">
-          <Text>JuniorPASS administration workspace</Text>
+          <Text>Junior Pass administration workspace</Text>
         </div>
       </div>
     </section>

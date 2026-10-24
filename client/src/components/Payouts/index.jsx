@@ -14,7 +14,6 @@ import {
   Typography,
 } from "antd";
 import {
-  BankOutlined,
   CheckOutlined,
   DownloadOutlined,
   FileDoneOutlined,
@@ -183,7 +182,15 @@ const Payouts = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (status) => <Tag className={`admin-payout-status is-${status.toLowerCase()}`}>{titleCase(status.toLowerCase())}</Tag>,
+      render: (status) => (
+        <Tag
+          className={`admin-status-tag is-${
+            status === "PAID" ? "success" : status === "VOID" ? "error" : "warning"
+          }`}
+        >
+          {titleCase(status.toLowerCase())}
+        </Tag>
+      ),
     },
     {
       title: "Actions",
@@ -218,11 +225,11 @@ const Payouts = () => {
 
   return (
     <div className="admin-payouts-page">
-      <section className="admin-payouts-header">
+      <section className="page-header-card admin-payouts-header">
         <div>
           <Text className="admin-payouts-kicker">Partner finance</Text>
-          <Title level={1}>Payouts</Title>
-          <Text type="secondary">Review delivered sessions and record each manual partner transfer.</Text>
+          <Title level={1} className="page-title">Payouts</Title>
+          <Text className="page-subtitle">Review delivered sessions and record each manual partner transfer.</Text>
         </div>
         <Button type="primary" icon={<PlusOutlined />} onClick={() => {
           draftForm.setFieldsValue({ cutoff_date: dayjs().add(1, "day").startOf("day") });
@@ -234,12 +241,12 @@ const Payouts = () => {
 
       {loading ? <Skeleton active /> : (
         <>
-          <section className="admin-payout-summary">
-            <article><BankOutlined /><span>Ready to settle</span><strong>{money(totals.amount)}</strong><small>{totals.credits.toFixed(4)} credits</small></article>
-            <article><FileDoneOutlined /><span>Partners ready</span><strong>{totals.partners}</strong><small>with delivered sessions</small></article>
+          <section className="admin-summary-strip" aria-label="Payout summary">
+            <article><span>Ready to settle</span><strong>{money(totals.amount)}</strong><small>{totals.credits.toFixed(4)} credits</small></article>
+            <article><span>Partners ready</span><strong>{totals.partners}</strong><small>with delivered sessions</small></article>
           </section>
 
-          <section className="admin-payouts-panel">
+          <section className="table-card admin-payouts-panel">
             <div className="admin-payouts-panel-heading">
               <Title level={3}>Payout history</Title>
               <Text type="secondary">Drafts reserve earnings so they cannot enter another payout.</Text>

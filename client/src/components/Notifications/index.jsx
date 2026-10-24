@@ -130,11 +130,11 @@ const Notifications = () => {
 
   return (
     <section className="admin-notifications-page">
-      <header className="admin-notifications-header">
+      <header className="page-header-card admin-notifications-header">
         <div>
           <span className="admin-notifications-kicker">OPERATIONS INBOX</span>
-          <h1>Admin notifications</h1>
-          <p>Review financial, partner, settlement and platform issues that need attention.</p>
+          <h1 className="page-title">Admin notifications</h1>
+          <p className="page-subtitle">Review financial, partner, settlement and platform issues that need attention.</p>
         </div>
         <div className="admin-notifications-header-actions">
           <Button
@@ -157,6 +157,12 @@ const Notifications = () => {
       </header>
 
       {error && <Alert type="error" showIcon message="Notifications could not be loaded" description={error} />}
+
+      <section className="admin-summary-strip" aria-label="Notification summary">
+        <div><span>All notifications</span><strong>{payload?.all_total || 0}</strong></div>
+        <div className="summary-warning"><span>Unread</span><strong>{payload?.unread_total || 0}</strong></div>
+        <div><span>System failures</span><strong>{payload?.category_totals?.system_failure || 0}</strong></div>
+      </section>
 
       <nav className="admin-notification-filters" aria-label="Notification categories">
         {CATEGORIES.map((item) => {

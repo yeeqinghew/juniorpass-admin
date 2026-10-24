@@ -41,8 +41,14 @@ export const API_ENDPOINTS = {
   MODERATE_REVIEW: (reviewId) =>
     `${API_BASE_URL}/reviews/${reviewId}/moderation`,
   GET_PROMOTIONS: `${API_BASE_URL}/promotions/admin`,
+  GET_PROMOTION_OPTIONS: `${API_BASE_URL}/promotions/admin/options`,
+  CREATE_PROMOTION: `${API_BASE_URL}/promotions/admin`,
   REVIEW_PROMOTION: (promotionId) =>
     `${API_BASE_URL}/promotions/admin/${promotionId}/review`,
+  UPDATE_PROMOTION_STATUS: (promotionId) =>
+    `${API_BASE_URL}/promotions/admin/${promotionId}/status`,
+  GET_PROMOTION_REPORT: (promotionId) =>
+    `${API_BASE_URL}/promotions/admin/${promotionId}/report`,
   APPROVE_CLASS: (listingId) =>
     `${API_BASE_URL}/admins/listings/${listingId}/approve`,
   REJECT_CLASS: (listingId) =>

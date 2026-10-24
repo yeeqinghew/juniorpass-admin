@@ -374,7 +374,7 @@ const AdminHomeLayout = () => {
               }
             )}
             <div className="header-page-context">
-              <Text className="header-eyebrow">JuniorPASS admin</Text>
+              <Text className="header-eyebrow">Junior Pass admin</Text>
               <Text className="header-title">{currentRoute.title}</Text>
             </div>
           </div>
@@ -401,7 +401,7 @@ const AdminHomeLayout = () => {
               />
               <div className="header-identity-copy">
                 <Text strong>Administrator</Text>
-                <small>JuniorPASS</small>
+                <small>Junior Pass</small>
               </div>
             </div>
 

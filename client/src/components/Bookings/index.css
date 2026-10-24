@@ -101,43 +101,6 @@
   font-size: var(--font-size-xs);
 }
 
-.admin-booking-status {
-  margin: 0;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-
-.admin-booking-status.is-upcoming,
-.admin-booking-status.is-rescheduled {
-  color: #225f7f;
-  background: var(--color-primary-light);
-  border-color: rgba(152, 189, 210, 0.7);
-}
-
-.admin-booking-status.is-in-progress {
-  color: #9a6700;
-  background: var(--color-warning-light);
-  border-color: #f4cf72;
-}
-
-.admin-booking-status.is-completed {
-  color: #087f5b;
-  background: var(--color-success-light);
-  border-color: #a7e1c7;
-}
-
-.admin-booking-status.is-cancelled {
-  color: #9f3238;
-  background: var(--color-error-light);
-  border-color: #f5b8bb;
-}
-
-.admin-booking-status.is-unknown {
-  color: var(--text-secondary);
-  background: var(--bg-tertiary);
-  border-color: var(--border-color);
-}
-
 .admin-bookings-pagination {
   display: flex;
   justify-content: flex-end;
@@ -345,17 +308,6 @@
   gap: var(--space-3);
   margin-bottom: var(--space-4);
 }
-
-.admin-makeup-status {
-  margin: 0;
-  text-transform: capitalize;
-}
-
-.admin-makeup-status.is-pending { color: #8a5a00; background: #fff8e1; }
-.admin-makeup-status.is-offered { color: #225f7f; background: var(--color-primary-light); }
-.admin-makeup-status.is-confirmed { color: #087f5b; background: var(--color-success-light); }
-.admin-makeup-status.is-rejected { color: #9f3238; background: var(--color-error-light); }
-.admin-makeup-status.is-withdrawn { color: var(--text-secondary); background: var(--bg-tertiary); }
 
 @media (max-width: 1100px) {
   .admin-bookings-summary {

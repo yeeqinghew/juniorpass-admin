@@ -88,7 +88,11 @@ const Partners = () => {
       key: "status",
       width: 120,
       render: (_, partner) =>
-        isSuspensionActive(partner) ? <Tag color="error">Suspended</Tag> : <Tag color="success">Active</Tag>,
+        isSuspensionActive(partner) ? (
+          <Tag className="admin-status-tag is-error">Suspended</Tag>
+        ) : (
+          <Tag className="admin-status-tag is-success">Active</Tag>
+        ),
     },
     {
       title: "Created On",
@@ -175,6 +179,21 @@ const Partners = () => {
           Invite partner
         </Button>
       </div>
+
+      <section className="admin-summary-strip" aria-label="Partner summary">
+        <div>
+          <span>Total partners</span>
+          <strong>{partners.length}</strong>
+        </div>
+        <div className="summary-success">
+          <span>Active partners</span>
+          <strong>{partners.filter((partner) => !isSuspensionActive(partner)).length}</strong>
+        </div>
+        <div className="summary-warning">
+          <span>Suspended partners</span>
+          <strong>{partners.filter((partner) => isSuspensionActive(partner)).length}</strong>
+        </div>
+      </section>
 
       <div className="table-card">
         <div className="table-toolbar">

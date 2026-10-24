@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, Button, Empty, Input, Modal, Rate, Select, Tag, Typography } from "antd";
-import { EyeInvisibleOutlined, EyeOutlined, StarOutlined } from "@ant-design/icons";
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 import "./index.css";
 
@@ -63,18 +63,23 @@ const Reviews = () => {
 
   return (
     <div className="admin-reviews-page">
-      <header className="admin-reviews-header">
+      <header className="page-header-card admin-reviews-header">
         <div>
           <Text className="admin-reviews-kicker">Trust and quality</Text>
-          <Title level={1}>Reviews</Title>
-          <Text>Moderate verified booking reviews and partner responses.</Text>
+          <Title level={1} className="page-title">Reviews</Title>
+          <Text className="page-subtitle">Moderate verified booking reviews and partner responses.</Text>
         </div>
-        <span className="admin-reviews-header-icon"><StarOutlined /></span>
       </header>
+
+      <section className="admin-summary-strip" aria-label="Review summary">
+        <div><span>Total reviews</span><strong>{reviews.length}</strong></div>
+        <div className="summary-success"><span>Published</span><strong>{reviews.filter((review) => review.status === "published").length}</strong></div>
+        <div className="summary-warning"><span>Hidden</span><strong>{reviews.filter((review) => review.status === "hidden").length}</strong></div>
+      </section>
 
       {error ? <Alert type="error" showIcon message="Reviews could not be loaded" /> : null}
 
-      <section className="admin-reviews-panel" aria-busy={loading}>
+      <section className="table-card admin-reviews-panel" aria-busy={loading}>
         <div className="admin-reviews-toolbar">
           <strong>{visibleReviews.length} reviews</strong>
           <Select
@@ -98,7 +103,11 @@ const Reviews = () => {
                   </div>
                   <div className="admin-review-rating">
                     <Rate disabled value={review.rating} />
-                    <Tag color={review.status === "published" ? "green" : "orange"}>
+                    <Tag
+                      className={`admin-status-tag ${
+                        review.status === "published" ? "is-success" : "is-warning"
+                      }`}
+                    >
                       {review.status}
                     </Tag>
                   </div>

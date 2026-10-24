@@ -302,8 +302,7 @@ const Classes = () => {
       key: "status",
       render: (active) => (
         <Tag
-          icon={active ? <CheckCircleOutlined /> : <StopOutlined />}
-          className={`admin-class-status ${active ? "is-active" : "is-inactive"}`}
+          className={`admin-status-tag ${active ? "is-success" : "is-error"}`}
         >
           {active ? "Active" : "Inactive"}
         </Tag>
@@ -369,7 +368,7 @@ const Classes = () => {
         </div>
       </div>
 
-      <div className="admin-classes-summary" aria-label="Class operations summary">
+      <div className="admin-summary-strip" aria-label="Class operations summary">
         <div>
           <span>Total classes</span>
           <strong>{summary.total}</strong>
@@ -448,7 +447,9 @@ const Classes = () => {
                 <Title level={2}>{selectedClass.listing_title}</Title>
               </div>
               <Tag
-                className={`admin-class-status ${selectedClass.active ? "is-active" : "is-inactive"}`}
+                className={`admin-status-tag ${
+                  selectedClass.active ? "is-success" : "is-error"
+                }`}
               >
                 {selectedClass.active ? "Active" : "Inactive"}
               </Tag>

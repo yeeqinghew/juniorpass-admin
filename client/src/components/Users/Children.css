@@ -1,0 +1,12 @@
+.child-directory-person,
+.child-directory-enrolments {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.child-directory-person span,
+.child-directory-enrolments span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}

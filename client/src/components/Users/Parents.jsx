@@ -39,7 +39,11 @@ const Parents = () => {
       key: "status",
       width: 120,
       render: (_, user) =>
-        isSuspensionActive(user) ? <Tag color="error">Suspended</Tag> : <Tag color="success">Active</Tag>,
+        isSuspensionActive(user) ? (
+          <Tag className="admin-status-tag is-error">Suspended</Tag>
+        ) : (
+          <Tag className="admin-status-tag is-success">Active</Tag>
+        ),
     },
     {
       title: "Created At",
@@ -114,6 +118,21 @@ const Parents = () => {
           {users.length} {users.length === 1 ? "account" : "accounts"}
         </div>
       </div>
+
+      <section className="admin-summary-strip" aria-label="Parent account summary">
+        <div>
+          <span>Total accounts</span>
+          <strong>{users.length}</strong>
+        </div>
+        <div className="summary-success">
+          <span>Active accounts</span>
+          <strong>{users.filter((user) => !isSuspensionActive(user)).length}</strong>
+        </div>
+        <div className="summary-warning">
+          <span>Suspended accounts</span>
+          <strong>{users.filter((user) => isSuspensionActive(user)).length}</strong>
+        </div>
+      </section>
 
       <div className="table-card">
         <div className="table-toolbar">

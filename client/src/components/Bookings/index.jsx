@@ -12,18 +12,14 @@ import {
   Typography,
 } from "antd";
 import {
-  CalendarOutlined,
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-  CloseCircleOutlined,
   CreditCardOutlined,
   EnvironmentOutlined,
   EyeOutlined,
   SafetyCertificateOutlined,
-  SyncOutlined,
   SwapOutlined,
   TeamOutlined,
   UserOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 import "./index.css";
@@ -91,44 +87,37 @@ const getStatusPresentation = (status) => {
     case "upcoming":
       return {
         label: "Upcoming",
-        icon: <CalendarOutlined />,
-        className: "is-upcoming",
+        className: "is-info",
       };
     case "in_progress":
       return {
         label: "In progress",
-        icon: <SyncOutlined />,
-        className: "is-in-progress",
+        className: "is-warning",
       };
     case "completed":
       return {
         label: "Completed",
-        icon: <CheckCircleOutlined />,
-        className: "is-completed",
+        className: "is-success",
       };
     case "cancelled":
       return {
         label: "Cancelled",
-        icon: <CloseCircleOutlined />,
-        className: "is-cancelled",
+        className: "is-error",
       };
     case "rescheduled":
       return {
         label: "Rescheduled",
-        icon: <SyncOutlined />,
-        className: "is-rescheduled",
+        className: "is-info",
       };
     case "scheduled":
       return {
         label: "Scheduled",
-        icon: <ClockCircleOutlined />,
-        className: "is-upcoming",
+        className: "is-info",
       };
     default:
       return {
         label: "Unknown",
-        icon: <ClockCircleOutlined />,
-        className: "is-unknown",
+        className: "is-neutral",
       };
   }
 };
@@ -136,10 +125,7 @@ const getStatusPresentation = (status) => {
 const StatusTag = ({ status }) => {
   const presentation = getStatusPresentation(status);
   return (
-    <Tag
-      icon={presentation.icon}
-      className={`admin-booking-status ${presentation.className}`}
-    >
+    <Tag className={`admin-status-tag ${presentation.className}`}>
       {presentation.label}
     </Tag>
   );
@@ -320,7 +306,9 @@ const Bookings = () => {
       render: (childName, booking) => (
         <div className="admin-booking-family">
           <Text strong>{childName || "No child recorded"}</Text>
-          <Text type="secondary">{booking.parent_name || "Unnamed parent"}</Text>
+          <Text type="secondary">
+            {booking.parent_name || "Unnamed parent"}
+          </Text>
           <Text type="secondary">{booking.parent_email}</Text>
         </div>
       ),
@@ -345,9 +333,7 @@ const Bookings = () => {
       render: (packageType, booking) => (
         <div className="admin-booking-package">
           <Text strong>{formatPackageName(packageType)}</Text>
-          <Text type="secondary">
-            {formatCredits(booking.charged_credits)}
-          </Text>
+          <Text type="secondary">{formatCredits(booking.charged_credits)}</Text>
         </div>
       ),
     },
@@ -400,7 +386,8 @@ const Bookings = () => {
             Bookings
           </Title>
           <Text className="page-subtitle">
-            Review enrolments, family details, credits, and class-session history.
+            Review enrolments, family details, credits, and class-session
+            history.
           </Text>
         </div>
         <div className="page-record-count">
@@ -410,7 +397,7 @@ const Bookings = () => {
       </div>
 
       <div
-        className="admin-bookings-summary"
+        className="admin-summary-strip"
         aria-label="Booking operations summary"
       >
         <div>
@@ -531,7 +518,9 @@ const Bookings = () => {
               </div>
               <div>
                 <span>Credits charged</span>
-                <strong>{formatCredits(selectedBooking.charged_credits)}</strong>
+                <strong>
+                  {formatCredits(selectedBooking.charged_credits)}
+                </strong>
               </div>
               <div>
                 <span>Sessions remaining</span>
@@ -570,7 +559,9 @@ const Bookings = () => {
                 </div>
                 <div>
                   <dt>Age</dt>
-                  <dd>{childAge === null ? "Not available" : `${childAge} years`}</dd>
+                  <dd>
+                    {childAge === null ? "Not available" : `${childAge} years`}
+                  </dd>
                 </div>
               </dl>
             </section>
@@ -580,7 +571,9 @@ const Bookings = () => {
                 <SafetyCertificateOutlined />
                 <div>
                   <h3>Child safety information</h3>
-                  <p>Visible only to authorised staff supporting this booking</p>
+                  <p>
+                    Visible only to authorised staff supporting this booking
+                  </p>
                 </div>
               </div>
               <dl className="admin-booking-detail-list">
@@ -595,7 +588,9 @@ const Bookings = () => {
                 </div>
                 <div>
                   <dt>Emergency phone</dt>
-                  <dd>{selectedBooking.emergency_contact_phone || "Not provided"}</dd>
+                  <dd>
+                    {selectedBooking.emergency_contact_phone || "Not provided"}
+                  </dd>
                 </div>
                 <div className="admin-booking-detail-wide">
                   <dt>Allergies, medical and care notes</dt>
@@ -623,7 +618,9 @@ const Bookings = () => {
                 </div>
                 <div>
                   <dt>Acknowledgement accepted</dt>
-                  <dd>{formatDateTime(selectedBooking.waiver_acknowledged_at)}</dd>
+                  <dd>
+                    {formatDateTime(selectedBooking.waiver_acknowledged_at)}
+                  </dd>
                 </div>
               </dl>
             </section>
@@ -634,15 +631,34 @@ const Bookings = () => {
                   <SwapOutlined />
                   <div>
                     <h3>Make-up request history</h3>
-                    <p>Parent requests and partner responses for this booking</p>
+                    <p>
+                      Parent requests and partner responses for this booking
+                    </p>
                   </div>
                 </div>
                 <div className="admin-makeup-requests">
                   {selectedBooking.makeup_requests.map((request) => (
-                    <article className="admin-makeup-request" key={request.request_id}>
+                    <article
+                      className="admin-makeup-request"
+                      key={request.request_id}
+                    >
                       <div className="admin-makeup-request-heading">
-                        <strong>{formatDateTime(request.original_start_date)}</strong>
-                        <Tag className={`admin-makeup-status is-${request.status}`}>
+                        <strong>
+                          {formatDateTime(request.original_start_date)}
+                        </strong>
+                        <Tag
+                          className={`admin-status-tag ${
+                            request.status === "confirmed"
+                              ? "is-success"
+                              : request.status === "rejected"
+                                ? "is-error"
+                                : request.status === "offered"
+                                  ? "is-info"
+                                  : request.status === "withdrawn"
+                                    ? "is-neutral"
+                                    : "is-warning"
+                          }`}
+                        >
                           {titleCase(request.status)}
                         </Tag>
                       </div>

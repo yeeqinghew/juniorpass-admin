@@ -11,12 +11,6 @@ import {
   Tabs,
   Tag,
 } from "antd";
-import {
-  AuditOutlined,
-  CreditCardOutlined,
-  GiftOutlined,
-  SwapOutlined,
-} from "@ant-design/icons";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 import "./index.css";
 
@@ -60,9 +54,28 @@ const formatMoney = (value) =>
     currency: "SGD",
   }).format(Number(value || 0));
 
+const getStatusVariant = (status) => {
+  const value = String(status || "UNKNOWN").toUpperCase();
+  if (["COMPLETED", "PROCESSED", "VALID", "CREDIT", "TOP_UP"].includes(value)) {
+    return "success";
+  }
+  if (["PENDING", "RECEIVED", "IGNORED", "BOOKING", "OTHER"].includes(value)) {
+    return "warning";
+  }
+  if (["FAILED", "REJECTED", "INVALID", "DEBIT", "CANCELLED", "EXPIRED"].includes(value)) {
+    return "error";
+  }
+  if (value === "REFERRAL_REWARD") return "info";
+  return "neutral";
+};
+
 const statusTag = (status) => {
   const value = String(status || "UNKNOWN").toUpperCase();
-  return <Tag className={`payment-status payment-status-${value.toLowerCase()}`}>{value}</Tag>;
+  return (
+    <Tag className={`admin-status-tag is-${getStatusVariant(value)}`}>
+      {value}
+    </Tag>
+  );
 };
 
 const getRowKey = (section, row) => {
@@ -248,41 +261,41 @@ const Payments = () => {
 
   return (
     <section className="payments-workspace">
-      <header className="payments-heading">
+      <header className="page-header-card payments-heading">
         <div>
           <span className="payments-eyebrow">FINANCE OPERATIONS</span>
-          <h1>Payments & transactions</h1>
-          <p>Trace every top-up, wallet movement, HitPay callback and referral reward.</p>
+          <h1 className="page-title">Payments & transactions</h1>
+          <p className="page-subtitle">Trace every top-up, wallet movement, HitPay callback and referral reward.</p>
         </div>
         <Button onClick={loadWorkspace} loading={loading}>Refresh</Button>
       </header>
 
       {error && <Alert type="error" showIcon message="Payments could not be loaded" description={error} />}
 
-      <div className="payments-summary" aria-label="Payment summary">
+      <div className="admin-summary-strip" aria-label="Payment summary">
         <article>
-          <CreditCardOutlined />
-          <div><span>Completed top-ups</span><strong>{formatMoney(summary?.payments?.completed_amount)}</strong></div>
+          <span>Completed top-ups</span>
+          <strong>{formatMoney(summary?.payments?.completed_amount)}</strong>
           <small>{summary?.payments?.completed || 0} payments · {summary?.payments?.completed_credits || 0} credits</small>
         </article>
         <article>
-          <AuditOutlined />
-          <div><span>Needs attention</span><strong>{summary?.payments?.failed || 0}</strong></div>
+          <span>Needs attention</span>
+          <strong>{summary?.payments?.failed || 0}</strong>
           <small>{summary?.payments?.pending || 0} pending · {summary?.webhooks?.rejected || 0} rejected callbacks</small>
         </article>
         <article>
-          <SwapOutlined />
-          <div><span>Wallet movement</span><strong>{summary?.wallet?.credits_in || 0} in</strong></div>
+          <span>Wallet movement</span>
+          <strong>{summary?.wallet?.credits_in || 0} in</strong>
           <small>{summary?.wallet?.credits_out || 0} credits used</small>
         </article>
         <article>
-          <GiftOutlined />
-          <div><span>Referral rewards</span><strong>{summary?.referrals?.rewarded_credits || 0}</strong></div>
+          <span>Referral rewards</span>
+          <strong>{summary?.referrals?.rewarded_credits || 0}</strong>
           <small>{summary?.referrals?.completed || 0} completed referrals</small>
         </article>
       </div>
 
-      <div className="payments-panel">
+      <div className="table-card payments-panel">
         <Tabs activeKey={section} items={tabs} onChange={changeSection} />
         <div className="payments-toolbar">
           <Input.Search

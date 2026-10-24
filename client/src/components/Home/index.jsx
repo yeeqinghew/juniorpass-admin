@@ -115,7 +115,7 @@ const Home = () => {
             Dashboard
           </Title>
           <Text className="home-subtitle">
-            Monitor JuniorPASS activity and access daily admin tasks.
+            Monitor Junior Pass activity and access daily admin tasks.
           </Text>
         </div>
         <Button

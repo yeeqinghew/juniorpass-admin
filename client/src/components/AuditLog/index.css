@@ -1,6 +1,6 @@
 .audit-log-page {
   display: grid;
-  gap: var(--space-5);
+  gap: 0;
 }
 
 .audit-log-header {

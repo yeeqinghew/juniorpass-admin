@@ -88,3 +88,48 @@ samp {
 .ant-badge-count {
   background-color: var(--color-primary);
 }
+
+/* Shared tag treatment: page-specific classes only choose the semantic colour. */
+.ant-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 24px;
+  margin: 0;
+  padding: 2px var(--space-2);
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.admin-status-tag.is-success {
+  color: #087f5b;
+  background: var(--color-success-light);
+  border-color: #a7e1c7;
+}
+
+.admin-status-tag.is-warning {
+  color: #9a6700;
+  background: var(--color-warning-light);
+  border-color: #f4cf72;
+}
+
+.admin-status-tag.is-error {
+  color: #9f3238;
+  background: var(--color-error-light);
+  border-color: #f5b8bb;
+}
+
+.admin-status-tag.is-info {
+  color: #225f7f;
+  background: var(--color-primary-light);
+  border-color: rgba(152, 189, 210, 0.7);
+}
+
+.admin-status-tag.is-neutral {
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}

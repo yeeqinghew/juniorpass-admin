@@ -21,6 +21,7 @@ const ENTITY_OPTIONS = [
   { value: "account", label: "Accounts" },
   { value: "conversion_rate", label: "Conversion rates" },
   { value: "settlement", label: "Settlements" },
+  { value: "promotion", label: "Promotions" },
 ];
 
 const ACTOR_OPTIONS = [
@@ -141,16 +142,22 @@ const AuditLog = () => {
 
   return (
     <section className="audit-log-page">
-      <header className="audit-log-header">
+      <header className="page-header-card audit-log-header">
         <div>
           <span className="audit-log-kicker">GOVERNANCE</span>
-          <h1>Audit log</h1>
-          <p>Immutable history of sensitive financial, catalogue and account changes.</p>
+          <h1 className="page-title">Audit log</h1>
+          <p className="page-subtitle">Immutable history of sensitive financial, catalogue and account changes.</p>
         </div>
         <Button onClick={loadAuditLog} loading={loading}>Refresh</Button>
       </header>
 
       {error && <Alert type="error" showIcon message="Audit log could not be loaded" description={error} />}
+
+      <section className="admin-summary-strip" aria-label="Audit log summary">
+        <div><span>Total events</span><strong>{payload?.pagination?.total || 0}</strong></div>
+        <div><span>Account events</span><strong>{payload?.summary?.account || 0}</strong></div>
+        <div><span>Financial events</span><strong>{(payload?.summary?.credit || 0) + (payload?.summary?.settlement || 0)}</strong></div>
+      </section>
 
       <section className="audit-log-panel">
         <div className="audit-log-toolbar">

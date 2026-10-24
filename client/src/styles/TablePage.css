@@ -91,6 +91,48 @@
   transform: translateY(-1px);
 }
 
+/* A single summary treatment for pages with operational metrics. */
+.admin-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--border-width);
+  margin-bottom: var(--space-5);
+  overflow: hidden;
+  background: var(--border-color-light);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+.admin-summary-strip > * {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-1);
+  min-height: 96px;
+  padding: 15px 18px;
+  background: var(--bg-secondary);
+}
+
+.admin-summary-strip span,
+.admin-summary-strip small {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.admin-summary-strip strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-xl);
+}
+
+.admin-summary-strip .summary-warning strong {
+  color: var(--color-warning);
+}
+
+.admin-summary-strip .summary-success strong {
+  color: var(--color-success);
+}
+
 .table-card {
   min-width: 0;
   overflow: hidden;
@@ -345,7 +387,7 @@
     justify-content: center;
   }
 
-  .enquiry-summary-strip {
+  .admin-summary-strip {
     grid-template-columns: 1fr;
   }
 }

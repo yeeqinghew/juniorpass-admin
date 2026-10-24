@@ -113,7 +113,6 @@
 .admin-class-detail-tags .ant-tag {
   margin: 0;
   color: var(--color-primary-dark);
-  font-size: 10px;
   background: var(--color-primary-light);
   border-color: rgba(152, 189, 210, 0.45);
   border-radius: 999px;
@@ -157,23 +156,6 @@
 .admin-class-bookings strong {
   color: var(--text-primary);
   font-size: var(--font-size-lg);
-}
-
-.admin-class-status {
-  margin: 0;
-  border-radius: 999px;
-}
-
-.admin-class-status.is-active {
-  color: #087f5b;
-  background: var(--color-success-light);
-  border-color: #a7e1c7;
-}
-
-.admin-class-status.is-inactive {
-  color: #9f3238;
-  background: var(--color-error-light);
-  border-color: #f5b8bb;
 }
 
 .admin-class-actions,

@@ -145,7 +145,7 @@ const Categories = () => {
       dataIndex: "is_active",
       width: 130,
       render: (isActive) => (
-        <Tag color={isActive ? "green" : "default"}>
+        <Tag className={`admin-status-tag ${isActive ? "is-success" : "is-neutral"}`}>
           {isActive ? "Active" : "Inactive"}
         </Tag>
       ),
@@ -210,6 +210,21 @@ const Categories = () => {
           Add category
         </Button>
       </div>
+
+      <section className="admin-summary-strip" aria-label="Category catalogue summary">
+        <div>
+          <span>Total categories</span>
+          <strong>{categories.length}</strong>
+        </div>
+        <div className="summary-success">
+          <span>Active categories</span>
+          <strong>{categories.filter((category) => category.is_active).length}</strong>
+        </div>
+        <div>
+          <span>Class assignments</span>
+          <strong>{categories.reduce((total, category) => total + Number(category.listing_count || 0), 0)}</strong>
+        </div>
+      </section>
 
       <div className="table-card">
         <div className="table-toolbar">

@@ -12,8 +12,6 @@ import {
   Input,
 } from "antd";
 import {
-  CheckCircleOutlined,
-  ClockCircleOutlined,
   EyeOutlined,
   CheckOutlined,
   SearchOutlined,
@@ -95,8 +93,7 @@ const PartnerEnquiries = () => {
       width: 135,
       render: (responded) => (
         <Tag
-          icon={responded ? <CheckCircleOutlined /> : <ClockCircleOutlined />}
-          color={responded ? "success" : "warning"}
+          className={`admin-status-tag ${responded ? "is-success" : "is-warning"}`}
         >
           {responded ? "Responded" : "Pending"}
         </Tag>
@@ -218,16 +215,16 @@ const PartnerEnquiries = () => {
         </Button>
       </div>
 
-      <div className="enquiry-summary-strip">
-        <div className="summary-strip-item">
+      <div className="admin-summary-strip">
+        <div>
           <Text>Total enquiries</Text>
           <strong>{enquiries.length}</strong>
         </div>
-        <div className="summary-strip-item warning">
+        <div className="summary-warning">
           <Text>Pending</Text>
           <strong>{enquiries.filter((e) => !e.responded).length}</strong>
         </div>
-        <div className="summary-strip-item success">
+        <div className="summary-success">
           <Text>Responded</Text>
           <strong>{enquiries.filter((e) => e.responded).length}</strong>
         </div>
@@ -276,14 +273,9 @@ const PartnerEnquiries = () => {
             </Text>
             {selectedEnquiry && (
               <Tag
-                icon={
-                  selectedEnquiry.responded ? (
-                    <CheckCircleOutlined />
-                  ) : (
-                    <ClockCircleOutlined />
-                  )
-                }
-                color={selectedEnquiry.responded ? "success" : "warning"}
+                className={`admin-status-tag ${
+                  selectedEnquiry.responded ? "is-success" : "is-warning"
+                }`}
               >
                 {selectedEnquiry.responded ? "Responded" : "Pending"}
               </Tag>
