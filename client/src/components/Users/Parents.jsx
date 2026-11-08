@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Input, Table, Tag, message } from "antd";
+import { Input, Select, Table, Tag, message } from "antd";
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 import toast from "react-hot-toast";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 import AccountSuspensionAction from "../AccountSuspensionAction";
-import { isSuspensionActive } from "../../utils/accountSuspension";
+import {
+  ACCOUNT_STATUS_FILTER_OPTIONS,
+  isSuspensionActive,
+  matchesAccountStatus,
+} from "../../utils/accountSuspension";
 
 const Parents = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const columns = [
     {
@@ -97,13 +102,14 @@ const Parents = () => {
   }, []);
 
   const normalizedSearch = searchTerm.trim().toLowerCase();
-  const filteredUsers = normalizedSearch
-    ? users.filter((user) =>
-        [user.name, user.email, user.phone_number].some((value) =>
-          value?.toLowerCase().includes(normalizedSearch),
-        ),
-      )
-    : users;
+  const filteredUsers = users.filter((user) => {
+    const matchesSearch =
+      !normalizedSearch ||
+      [user.name, user.email, user.phone_number].some((value) =>
+        value?.toLowerCase().includes(normalizedSearch),
+      );
+    return matchesSearch && matchesAccountStatus(user, statusFilter);
+  });
 
   return (
     <div className="page-container">
@@ -140,14 +146,23 @@ const Parents = () => {
             <h2>Parent directory</h2>
             <p>{filteredUsers.length} records shown</p>
           </div>
-          <Input
-            allowClear
-            prefix={<SearchOutlined />}
-            placeholder="Search name, email, or phone"
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-            className="table-search"
-          />
+          <div className="table-toolbar-actions">
+            <Input
+              allowClear
+              prefix={<SearchOutlined />}
+              placeholder="Search name, email, or phone"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              className="table-search"
+            />
+            <Select
+              className="account-status-filter"
+              options={ACCOUNT_STATUS_FILTER_OPTIONS}
+              value={statusFilter}
+              onChange={setStatusFilter}
+              aria-label="Filter parent accounts by status"
+            />
+          </div>
         </div>
         <Table
           columns={columns}

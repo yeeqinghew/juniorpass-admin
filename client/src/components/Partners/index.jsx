@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Table, message, Image, Button, Input, Tag } from "antd";
+import { Table, message, Image, Button, Input, Select, Tag } from "antd";
 import { PlusOutlined, SearchOutlined, ShopOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 import AccountSuspensionAction from "../AccountSuspensionAction";
-import { isSuspensionActive } from "../../utils/accountSuspension";
+import {
+  ACCOUNT_STATUS_FILTER_OPTIONS,
+  isSuspensionActive,
+  matchesAccountStatus,
+} from "../../utils/accountSuspension";
 
 const Partners = () => {
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const navigate = useNavigate();
 
   const columns = [
@@ -146,20 +151,21 @@ const Partners = () => {
   }, []);
 
   const normalizedSearch = searchTerm.trim().toLowerCase();
-  const filteredPartners = normalizedSearch
-    ? partners.filter((partner) =>
-        [
-          partner.partner_name,
-          partner.email,
-          partner.contact_number,
-          partner.categories,
-        ].some((value) =>
-          String(value || "")
-            .toLowerCase()
-            .includes(normalizedSearch),
-        ),
-      )
-    : partners;
+  const filteredPartners = partners.filter((partner) => {
+    const matchesSearch =
+      !normalizedSearch ||
+      [
+        partner.partner_name,
+        partner.email,
+        partner.contact_number,
+        partner.categories,
+      ].some((value) =>
+        String(value || "")
+          .toLowerCase()
+          .includes(normalizedSearch),
+      );
+    return matchesSearch && matchesAccountStatus(partner, statusFilter);
+  });
 
   return (
     <div className="page-container">
@@ -213,6 +219,13 @@ const Partners = () => {
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
               className="table-search"
+            />
+            <Select
+              className="account-status-filter"
+              options={ACCOUNT_STATUS_FILTER_OPTIONS}
+              value={statusFilter}
+              onChange={setStatusFilter}
+              aria-label="Filter partner accounts by status"
             />
           </div>
         </div>
