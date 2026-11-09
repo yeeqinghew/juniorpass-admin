@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, Button, Card, DatePicker, Form, InputNumber, Space, Table, Typography, message } from "antd";
 import dayjs from "dayjs";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
@@ -8,9 +8,15 @@ const { Title, Paragraph, Text } = Typography;
 
 const Settings = () => {
   const [form] = Form.useForm();
+  const [pricingForm] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [history, setHistory] = useState([]);
+  const [pricingLoading, setPricingLoading] = useState(true);
+  const [pricingSaving, setPricingSaving] = useState(false);
+  const [pricingTiers, setPricingTiers] = useState([]);
+  const [pricingHistory, setPricingHistory] = useState([]);
+  const [upcomingPricing, setUpcomingPricing] = useState([]);
 
   useEffect(() => {
     const loadRate = async () => {
@@ -31,6 +37,30 @@ const Settings = () => {
     };
     loadRate();
   }, [form]);
+
+  const loadPricing = useCallback(async () => {
+    setPricingLoading(true);
+    try {
+      const response = await fetchWithAuth(API_ENDPOINTS.CREDIT_PRICING);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Unable to load credit pricing");
+      setPricingTiers(data.tiers || []);
+      setPricingHistory(data.history || []);
+      setUpcomingPricing(data.upcoming || []);
+      pricingForm.setFieldsValue({
+        rates: Object.fromEntries((data.tiers || []).map((tier) => [tier.key, tier.rate])),
+        effective_from: dayjs(),
+      });
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      setPricingLoading(false);
+    }
+  }, [pricingForm]);
+
+  useEffect(() => {
+    loadPricing();
+  }, [loadPricing]);
 
   const saveRate = async (values) => {
     setSaving(true);
@@ -62,6 +92,27 @@ const Settings = () => {
       message.error(error.message);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const savePricing = async (values) => {
+    setPricingSaving(true);
+    try {
+      const response = await fetchWithAuth(API_ENDPOINTS.CREDIT_PRICING, {
+        method: "PUT",
+        body: JSON.stringify({
+          rates: values.rates,
+          effective_from: values.effective_from.toISOString(),
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Unable to save credit pricing");
+      message.success("Parent top-up pricing saved");
+      await loadPricing();
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      setPricingSaving(false);
     }
   };
 
@@ -105,6 +156,88 @@ const Settings = () => {
             <Text type="secondary">Example: $1,000 at $9.50/credit = 106 credits</Text>
           </Space>
         </Form>
+      </Card>
+      <Card loading={pricingLoading} className="settings-card">
+        <Title level={4}>Parent top-up pricing</Title>
+        <Paragraph type="secondary">
+          Set the SGD price paid for each credit. Tier boundaries stay fixed so
+          checkout, reporting and published pricing remain consistent.
+        </Paragraph>
+        <Alert
+          type="warning"
+          showIcon
+          message="Changes affect new payment requests only. Existing payments and wallet balances are unchanged."
+        />
+        {upcomingPricing.length > 0 && (
+          <Alert
+            type="info"
+            showIcon
+            className="settings-upcoming-alert"
+            message={`${upcomingPricing.length} scheduled tier change${upcomingPricing.length === 1 ? "" : "s"}`}
+          />
+        )}
+        <Form
+          form={pricingForm}
+          layout="vertical"
+          onFinish={savePricing}
+          className="settings-form"
+        >
+          <div className="settings-tier-grid">
+            {pricingTiers.map((tier) => (
+              <Form.Item
+                key={tier.key}
+                name={["rates", tier.key]}
+                label={tier.label}
+                rules={[
+                  { required: true, message: "Enter a rate" },
+                  { type: "number", min: 0.01, max: 1000, message: "Enter $0.01–$1,000" },
+                ]}
+              >
+                <InputNumber prefix="$" min={0.01} max={1000} precision={2} step={0.05} />
+              </Form.Item>
+            ))}
+          </div>
+          <Form.Item
+            name="effective_from"
+            label="Effective from"
+            rules={[{ required: true, message: "Select an effective date" }]}
+          >
+            <DatePicker showTime />
+          </Form.Item>
+          <Button type="primary" htmlType="submit" loading={pricingSaving}>
+            Save top-up pricing
+          </Button>
+        </Form>
+      </Card>
+      <Card className="settings-card" title="Top-up pricing history">
+        <Table
+          rowKey={(row) => `${row.key}-${row.effective_from}-${row.changed_at}`}
+          pagination={{ pageSize: 8 }}
+          dataSource={pricingHistory}
+          columns={[
+            {
+              title: "Tier",
+              dataIndex: "key",
+              render: (key) =>
+                pricingTiers.find((tier) => tier.key === key)?.label || key,
+            },
+            {
+              title: "Previous",
+              dataIndex: "old_rate",
+              render: (value) => (value == null ? "—" : `$${value.toFixed(2)}`),
+            },
+            {
+              title: "New rate",
+              dataIndex: "new_rate",
+              render: (value) => `$${value.toFixed(2)}`,
+            },
+            {
+              title: "Effective from",
+              dataIndex: "effective_from",
+              render: (value) => dayjs(value).format("D MMM YYYY, h:mm A"),
+            },
+          ]}
+        />
       </Card>
       <Card className="settings-card" title="Rate history">
         <Table

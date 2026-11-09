@@ -65,6 +65,7 @@ export const API_ENDPOINTS = {
   UPDATE_CATEGORY: (categoryId) => `${API_BASE_URL}/categories/${categoryId}`,
 
   CREDIT_CONVERSION: `${API_BASE_URL}/admins/settings/credit-conversion`,
+  CREDIT_PRICING: `${API_BASE_URL}/admins/settings/credit-pricing`,
 
   // Partner payouts
   GET_PAYOUTS: `${API_BASE_URL}/payouts/admin`,

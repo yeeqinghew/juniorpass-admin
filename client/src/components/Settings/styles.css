@@ -13,3 +13,23 @@
 .settings-form .ant-input-number {
   width: 220px;
 }
+
+.settings-tier-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 20px;
+}
+
+.settings-tier-grid .ant-input-number {
+  width: 100%;
+}
+
+.settings-upcoming-alert {
+  margin-top: 12px;
+}
+
+@media (max-width: 640px) {
+  .settings-tier-grid {
+    grid-template-columns: 1fr;
+  }
+}
