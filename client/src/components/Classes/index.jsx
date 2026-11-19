@@ -4,6 +4,7 @@ import {
   Button,
   Drawer,
   Empty,
+  Form,
   Input,
   Modal,
   Popconfirm,
@@ -18,6 +19,7 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   EnvironmentOutlined,
+  EditOutlined,
   EyeOutlined,
   ReadOutlined,
   SearchOutlined,
@@ -32,6 +34,13 @@ const STATUS_OPTIONS = [
   { label: "All statuses", value: "all" },
   { label: "Active", value: "active" },
   { label: "Inactive", value: "inactive" },
+];
+
+const AGE_GROUP_OPTIONS = [
+  { value: "infant", label: "Infant" },
+  { value: "toddler", label: "Toddler" },
+  { value: "preschooler", label: "Preschooler" },
+  { value: "above-7", label: "Above 7" },
 ];
 
 const TABLE_PAGINATION = {
@@ -95,6 +104,10 @@ const Classes = () => {
   const [deactivateTarget, setDeactivateTarget] = useState(null);
   const [deactivationReason, setDeactivationReason] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
+  const [editingClass, setEditingClass] = useState(null);
+  const [editCategories, setEditCategories] = useState([]);
+  const [editLoading, setEditLoading] = useState(false);
+  const [editForm] = Form.useForm();
 
   const loadClasses = useCallback(async () => {
     setLoading(true);
@@ -222,6 +235,55 @@ const Classes = () => {
     }
   };
 
+  const openEditListing = async (item) => {
+    try {
+      const response = await fetchWithAuth(API_ENDPOINTS.GET_ALL_CATEGORIES);
+      const categories = await response.json();
+      if (!response.ok) throw new Error(categories.error || "Unable to load categories");
+
+      const availableCategories = categories.filter((category) => category.is_active);
+      const categoryIdsByName = new Map(
+        availableCategories.map((category) => [category.name, category.id]),
+      );
+      setEditCategories(availableCategories);
+      setEditingClass(item);
+      editForm.setFieldsValue({
+        listing_title: item.listing_title,
+        description: item.description,
+        age_groups: toArray(item.age_groups),
+        category_ids: toArray(item.categories)
+          .map((name) => categoryIdsByName.get(name))
+          .filter(Boolean),
+        reason: "",
+      });
+    } catch (requestError) {
+      message.error(requestError.message || "Unable to open the listing editor");
+    }
+  };
+
+  const saveListingEdit = async (values) => {
+    if (!editingClass) return;
+    setEditLoading(true);
+    try {
+      const response = await fetchWithAuth(
+        API_ENDPOINTS.UPDATE_ADMIN_LISTING(editingClass.listing_id),
+        { method: "PATCH", body: JSON.stringify(values) },
+      );
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Unable to update listing");
+
+      setEditingClass(null);
+      setSelectedClass(null);
+      editForm.resetFields();
+      message.success("Listing updated and recorded in the audit log");
+      await loadClasses();
+    } catch (requestError) {
+      message.error(requestError.message || "Unable to update listing");
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
   const columns = [
     {
       title: "Class",
@@ -319,6 +381,9 @@ const Classes = () => {
             onClick={() => setSelectedClass({ ...item, listing_id: listingId })}
           >
             View
+          </Button>
+          <Button icon={<EditOutlined />} onClick={() => openEditListing(item)}>
+            Edit
           </Button>
           {item.active ? (
             <Button
@@ -593,6 +658,9 @@ const Classes = () => {
             )}
 
             <div className="admin-class-detail-actions">
+              <Button icon={<EditOutlined />} onClick={() => openEditListing(selectedClass)}>
+                Edit listing
+              </Button>
               {selectedClass.active ? (
                 <Button
                   className="admin-class-deactivate"
@@ -622,6 +690,75 @@ const Classes = () => {
           </div>
         )}
       </Drawer>
+
+      <Modal
+        className="admin-class-edit-modal"
+        title="Edit listing"
+        open={Boolean(editingClass)}
+        onCancel={() => {
+          if (editLoading) return;
+          setEditingClass(null);
+          editForm.resetFields();
+        }}
+        footer={null}
+        maskClosable={!editLoading}
+      >
+        <Alert
+          className="admin-class-edit-note"
+          type="info"
+          showIcon
+          message="Listing content only"
+          description="Schedules, capacity and pricing remain protected in the partner schedule editor because they can affect existing bookings."
+        />
+        <Form form={editForm} layout="vertical" onFinish={saveListingEdit}>
+          <Form.Item
+            name="listing_title"
+            label="Class title"
+            rules={[{ required: true, min: 2, max: 200 }]}
+          >
+            <Input maxLength={200} />
+          </Form.Item>
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[{ required: true, min: 1, max: 5000 }]}
+          >
+            <Input.TextArea rows={5} maxLength={5000} showCount />
+          </Form.Item>
+          <Form.Item
+            name="age_groups"
+            label="Age groups"
+            rules={[{ required: true, message: "Select at least one age group" }]}
+          >
+            <Select mode="multiple" options={AGE_GROUP_OPTIONS} />
+          </Form.Item>
+          <Form.Item
+            name="category_ids"
+            label="Categories"
+            rules={[{ required: true, message: "Select at least one category" }]}
+          >
+            <Select mode="multiple" options={editCategories.map((category) => ({
+              value: category.id,
+              label: category.name,
+            }))} />
+          </Form.Item>
+          <Form.Item
+            name="reason"
+            label="Reason for change"
+            rules={[{ required: true, min: 3, max: 500 }]}
+          >
+            <Input.TextArea rows={3} maxLength={500} showCount placeholder="This is saved in the audit log" />
+          </Form.Item>
+          <div className="admin-class-edit-actions">
+            <Button disabled={editLoading} onClick={() => setEditingClass(null)}>
+              Cancel
+            </Button>
+            <Button type="primary" htmlType="submit" loading={editLoading}>
+              Save changes
+            </Button>
+          </div>
+        </Form>
+      </Modal>
 
       <Modal
         className="admin-class-deactivate-modal"

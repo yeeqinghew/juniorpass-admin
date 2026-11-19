@@ -427,6 +427,22 @@
   font-weight: var(--font-weight-semibold);
 }
 
+.admin-class-edit-modal .ant-modal-body {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.admin-class-edit-note {
+  margin: 0;
+}
+
+.admin-class-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
 @media (max-width: 1050px) {
   .admin-classes-summary,
   .admin-class-detail-grid,
