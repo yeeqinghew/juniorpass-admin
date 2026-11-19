@@ -55,8 +55,17 @@ const toArray = (value) => {
   if (!value) return [];
 
   if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+      return trimmed
+        .slice(1, -1)
+        .split(",")
+        .map((item) => item.trim().replace(/^"|"$/g, ""))
+        .filter(Boolean);
+    }
+
     try {
-      const parsed = JSON.parse(value);
+      const parsed = JSON.parse(trimmed);
       return Array.isArray(parsed) ? parsed : [value];
     } catch {
       return [value];
