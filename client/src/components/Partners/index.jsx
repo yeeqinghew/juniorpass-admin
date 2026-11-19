@@ -10,6 +10,7 @@ import {
   isSuspensionActive,
   matchesAccountStatus,
 } from "../../utils/accountSuspension";
+import { safeExternalHttpsUrl } from "../../utils/safeUrl";
 
 const Partners = () => {
   const [partners, setPartners] = useState([]);
@@ -63,13 +64,14 @@ const Partners = () => {
       dataIndex: "website",
       key: "website",
       width: 100,
-      render: (website) => (
-        website ? (
-          <a href={website} target="_blank" rel="noopener noreferrer" className="table-link">
+      render: (website) => {
+        const safeWebsite = safeExternalHttpsUrl(website);
+        return safeWebsite ? (
+          <a href={safeWebsite} target="_blank" rel="noopener noreferrer" className="table-link">
             Visit
           </a>
-        ) : "—"
-      ),
+        ) : "—";
+      },
     },
     {
       title: "Rating",
