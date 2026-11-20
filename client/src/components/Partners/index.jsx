@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Table, message, Image, Button, Input, Select, Tag } from "antd";
+import { Table, message, Image, Button, Input, Select, Space, Tag } from "antd";
 import { PlusOutlined, SearchOutlined, ShopOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 import AccountSuspensionAction from "../AccountSuspensionAction";
+import CreditAdjustmentAction from "../CreditAdjustmentAction";
 import {
   ACCOUNT_STATUS_FILTER_OPTIONS,
   isSuspensionActive,
@@ -20,6 +21,14 @@ const Partners = () => {
   const navigate = useNavigate();
 
   const columns = [
+    {
+      title: "Credits",
+      dataIndex: "credit",
+      key: "credit",
+      width: 110,
+      render: (credit) => `${Number(credit) || 0}`,
+      sorter: (a, b) => Number(a.credit || 0) - Number(b.credit || 0),
+    },
     {
       title: "Logo",
       dataIndex: "picture",
@@ -112,16 +121,25 @@ const Partners = () => {
     {
       title: "Actions",
       key: "actions",
-      width: 120,
+      width: 250,
       fixed: "right",
       render: (_, partner) => (
-        <AccountSuspensionAction
-          accountType="partner"
-          account={partner}
-          onUpdated={(id, changes) =>
-            setPartners((current) => current.map((item) => item.partner_id === id ? { ...item, ...changes } : item))
-          }
-        />
+        <Space size={0}>
+          <CreditAdjustmentAction
+            accountType="partner"
+            account={partner}
+            onUpdated={(id, changes) =>
+              setPartners((current) => current.map((item) => item.partner_id === id ? { ...item, ...changes } : item))
+            }
+          />
+          <AccountSuspensionAction
+            accountType="partner"
+            account={partner}
+            onUpdated={(id, changes) =>
+              setPartners((current) => current.map((item) => item.partner_id === id ? { ...item, ...changes } : item))
+            }
+          />
+        </Space>
       ),
     },
   ];
@@ -240,7 +258,7 @@ const Partners = () => {
           loading={loading}
           bordered={false}
           size="middle"
-          scroll={{ x: 1370 }}
+          scroll={{ x: 1620 }}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,

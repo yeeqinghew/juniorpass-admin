@@ -24,6 +24,9 @@ export const API_ENDPOINTS = {
   GET_ALL_PARENTS: `${API_BASE_URL}/admins/getAllParents`,
   UPDATE_ACCOUNT_SUSPENSION: (accountType, accountId) =>
     `${API_BASE_URL}/admins/accounts/${accountType}/${accountId}/suspension`,
+  CREDIT_ADJUSTMENTS: `${API_BASE_URL}/credit-adjustments/admin`,
+  GET_CREDIT_ADJUSTMENTS: (accountType, accountId) =>
+    `${API_BASE_URL}/credit-adjustments/admin?account_type=${encodeURIComponent(accountType)}&account_id=${encodeURIComponent(accountId)}`,
 
   // Children
   GET_ALL_CHILDREN: `${API_BASE_URL}/admins/getAllChildren`,

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Input, Select, Table, Tag, message } from "antd";
+import { Input, Select, Space, Table, Tag, message } from "antd";
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 import toast from "react-hot-toast";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 import AccountSuspensionAction from "../AccountSuspensionAction";
+import CreditAdjustmentAction from "../CreditAdjustmentAction";
 import {
   ACCOUNT_STATUS_FILTER_OPTIONS,
   isSuspensionActive,
@@ -17,6 +18,14 @@ const Parents = () => {
   const [statusFilter, setStatusFilter] = useState("all");
 
   const columns = [
+    {
+      title: "Credits",
+      dataIndex: "credit",
+      key: "credit",
+      width: 110,
+      render: (credit) => `${Number(credit) || 0}`,
+      sorter: (a, b) => Number(a.credit || 0) - Number(b.credit || 0),
+    },
     {
       title: "Name",
       dataIndex: "name",
@@ -61,16 +70,25 @@ const Parents = () => {
     {
       title: "Actions",
       key: "actions",
-      width: 120,
+      width: 250,
       fixed: "right",
       render: (_, user) => (
-        <AccountSuspensionAction
-          accountType="parent"
-          account={user}
-          onUpdated={(id, changes) =>
-            setUsers((current) => current.map((item) => item.user_id === id ? { ...item, ...changes } : item))
-          }
-        />
+        <Space size={0}>
+          <CreditAdjustmentAction
+            accountType="parent"
+            account={user}
+            onUpdated={(id, changes) =>
+              setUsers((current) => current.map((item) => item.user_id === id ? { ...item, ...changes } : item))
+            }
+          />
+          <AccountSuspensionAction
+            accountType="parent"
+            account={user}
+            onUpdated={(id, changes) =>
+              setUsers((current) => current.map((item) => item.user_id === id ? { ...item, ...changes } : item))
+            }
+          />
+        </Space>
       ),
     },
   ];
@@ -173,7 +191,7 @@ const Parents = () => {
           loading={loading}
           bordered={false}
           size="middle"
-          scroll={{ x: 830 }}
+          scroll={{ x: 1080 }}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,

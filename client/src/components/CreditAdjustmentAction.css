@@ -1,0 +1,65 @@
+.credit-adjustment-modal .ant-modal-body {
+  max-height: min(70vh, 720px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.credit-adjustment-balance {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.credit-adjustment-balance > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background: var(--bg-primary);
+  border: var(--border-width) solid var(--border-color-light);
+  border-radius: var(--border-radius);
+}
+
+.credit-adjustment-balance span,
+.credit-adjustment-form label > span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.credit-adjustment-balance strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+}
+
+.credit-adjustment-balance strong.is-invalid {
+  color: var(--color-error);
+}
+
+.credit-adjustment-form,
+.credit-adjustment-form label,
+.credit-adjustment-form .ant-input-number,
+.credit-adjustment-form .ant-select {
+  width: 100%;
+}
+
+.credit-adjustment-form label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.credit-adjustment-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+@media (max-width: 640px) {
+  .credit-adjustment-balance,
+  .credit-adjustment-fields {
+    grid-template-columns: 1fr;
+  }
+}
