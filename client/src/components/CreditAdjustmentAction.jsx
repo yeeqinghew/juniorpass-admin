@@ -2,17 +2,18 @@ import { useState } from "react";
 import {
   Button,
   Checkbox,
-  Divider,
   Input,
   InputNumber,
-  List,
   Modal,
   Select,
-  Space,
-  Tag,
   Typography,
 } from "antd";
-import { WalletOutlined } from "@ant-design/icons";
+import {
+  ArrowRightOutlined,
+  HistoryOutlined,
+  SafetyCertificateOutlined,
+  WalletOutlined,
+} from "@ant-design/icons";
 import toast from "react-hot-toast";
 import { API_ENDPOINTS, fetchWithAuth } from "../config/api";
 import "./CreditAdjustmentAction.css";
@@ -130,11 +131,12 @@ const CreditAdjustmentAction = ({ accountType, account, onUpdated }) => {
         className="credit-adjustment-modal"
       >
         <div className="credit-adjustment-balance" aria-live="polite">
-          <div>
+          <div className="credit-adjustment-balance-card">
             <span>Current balance</span>
             <strong>{currentBalance} credits</strong>
           </div>
-          <div>
+          <ArrowRightOutlined className="credit-adjustment-balance-arrow" aria-hidden="true" />
+          <div className="credit-adjustment-balance-card">
             <span>Balance after adjustment</span>
             <strong className={resultingBalance < 0 ? "is-invalid" : ""}>
               {resultingBalance} credits
@@ -142,7 +144,13 @@ const CreditAdjustmentAction = ({ accountType, account, onUpdated }) => {
           </div>
         </div>
 
-        <Space direction="vertical" size="middle" className="credit-adjustment-form">
+        <section className="credit-adjustment-form" aria-labelledby="credit-adjustment-details">
+          <div className="credit-adjustment-section-heading">
+            <div>
+              <span id="credit-adjustment-details">Adjustment details</span>
+              <p>Record a clear reason for this permanent balance change.</p>
+            </div>
+          </div>
           <div className="credit-adjustment-fields">
             <label>
               <span>Adjustment</span>
@@ -192,13 +200,25 @@ const CreditAdjustmentAction = ({ accountType, account, onUpdated }) => {
               placeholder="Optional ticket, payment, or support reference"
             />
           </label>
-          <Checkbox checked={confirmed} onChange={(event) => setConfirmed(event.target.checked)}>
-            I have checked the account, amount and reason. This record cannot be edited or deleted.
+          <Checkbox
+            className="credit-adjustment-confirmation"
+            checked={confirmed}
+            onChange={(event) => setConfirmed(event.target.checked)}
+          >
+            <SafetyCertificateOutlined aria-hidden="true" />
+            <span>I have checked the account, amount and reason. This record cannot be edited or deleted.</span>
           </Checkbox>
-        </Space>
+        </section>
 
-        <Divider>Recent adjustments</Divider>
-        <div className="credit-adjustment-history">
+        <section className="credit-adjustment-history" aria-labelledby="credit-adjustment-history-heading">
+          <div className="credit-adjustment-section-heading">
+            <div>
+              <span id="credit-adjustment-history-heading">
+                <HistoryOutlined aria-hidden="true" /> Recent adjustments
+              </span>
+              <p>Latest manual changes to this account.</p>
+            </div>
+          </div>
           {historyLoading && (
             <Text type="secondary">Loading recent adjustments…</Text>
           )}
@@ -206,26 +226,25 @@ const CreditAdjustmentAction = ({ accountType, account, onUpdated }) => {
             <Text type="secondary">No previous manual adjustments.</Text>
           )}
           {!historyLoading && history.length > 0 && (
-            <List
-              dataSource={history}
-              renderItem={(item) => (
-                <List.Item>
-                  <List.Item.Meta
-                    title={
-                      <Space>
-                        <Tag color={Number(item.credit_delta) > 0 ? "green" : "red"}>
-                          {Number(item.credit_delta) > 0 ? "+" : ""}{item.credit_delta} credits
-                        </Tag>
-                        <Text>{item.balance_before} → {item.balance_after}</Text>
-                      </Space>
-                    }
-                    description={`${item.reason} · ${item.created_by_name || "Administrator"} · ${new Date(item.created_at).toLocaleString()}`}
-                  />
-                </List.Item>
-              )}
-            />
+            <ul className="credit-adjustment-history-list">
+              {history.map((item) => (
+                <li key={item.adjustment_id}>
+                  <span
+                    className={`credit-adjustment-history-amount ${Number(item.credit_delta) > 0 ? "is-credit" : "is-debit"}`}
+                  >
+                    {Number(item.credit_delta) > 0 ? "+" : ""}{item.credit_delta} credits
+                  </span>
+                  <div>
+                    <strong>{item.reason}</strong>
+                    <span>
+                      {item.balance_before} → {item.balance_after} credits · {item.created_by_name || "Administrator"} · {new Date(item.created_at).toLocaleString()}
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
           )}
-        </div>
+        </section>
       </Modal>
     </>
   );

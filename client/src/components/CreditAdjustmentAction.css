@@ -1,18 +1,28 @@
 .credit-adjustment-balance {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-3);
-  margin-bottom: var(--space-5);
-}
-
-.credit-adjustment-balance > div {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  padding: var(--space-4);
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  padding: var(--space-3);
   background: var(--bg-primary);
   border: var(--border-width) solid var(--border-color-light);
   border-radius: var(--border-radius);
+}
+
+.credit-adjustment-balance-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.credit-adjustment-balance-card:last-child {
+  text-align: right;
+}
+
+.credit-adjustment-balance-arrow {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
 }
 
 .credit-adjustment-balance span,
@@ -38,6 +48,16 @@
   width: 100%;
 }
 
+.credit-adjustment-form,
+.credit-adjustment-history {
+  padding-top: var(--space-4);
+  border-top: var(--border-width) solid var(--border-color-light);
+}
+
+.credit-adjustment-form label {
+  margin-top: var(--space-3);
+}
+
 .credit-adjustment-form label {
   display: flex;
   flex-direction: column;
@@ -51,19 +71,119 @@
 }
 
 .credit-adjustment-history {
-  max-height: 12rem;
+  max-height: 13rem;
+  margin-top: var(--space-4);
   overflow-y: auto;
-  padding: 0 var(--space-1);
+}
+
+.credit-adjustment-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.credit-adjustment-section-heading span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.credit-adjustment-section-heading p {
+  margin: var(--space-1) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.credit-adjustment-confirmation {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  width: 100%;
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  background: var(--bg-primary);
+  border: var(--border-width) solid var(--border-color-light);
+  border-radius: var(--border-radius);
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.credit-adjustment-confirmation .ant-checkbox {
+  margin-top: 0.15rem;
+}
+
+.credit-adjustment-confirmation .ant-checkbox + span {
+  padding-inline-start: 0;
+}
+
+.credit-adjustment-confirmation svg {
+  color: var(--color-primary);
+  margin-right: var(--space-2);
 }
 
 .credit-adjustment-history > .ant-typography {
   display: block;
-  padding: var(--space-2) 0;
-  text-align: center;
+  padding: var(--space-3);
+  text-align: left;
+  background: var(--bg-primary);
+  border: var(--border-width) dashed var(--border-color-light);
+  border-radius: var(--border-radius);
 }
 
-.credit-adjustment-history .ant-list-item {
-  padding-inline: var(--space-1);
+.credit-adjustment-history-list {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.credit-adjustment-history-list li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+  padding: var(--space-3);
+  background: var(--bg-primary);
+  border: var(--border-width) solid var(--border-color-light);
+  border-radius: var(--border-radius);
+}
+
+.credit-adjustment-history-list strong,
+.credit-adjustment-history-list span {
+  display: block;
+}
+
+.credit-adjustment-history-list strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.credit-adjustment-history-list div > span {
+  margin-top: var(--space-1);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.credit-adjustment-history-amount {
+  white-space: nowrap;
+  padding: 0.2rem var(--space-2);
+  border: var(--border-width) solid currentColor;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.credit-adjustment-history-amount.is-credit {
+  color: var(--color-success);
+}
+
+.credit-adjustment-history-amount.is-debit {
+  color: var(--color-error);
 }
 
 @media (max-height: 680px) {
@@ -77,5 +197,13 @@
   .credit-adjustment-balance,
   .credit-adjustment-fields {
     grid-template-columns: 1fr;
+  }
+
+  .credit-adjustment-balance-card:last-child {
+    text-align: left;
+  }
+
+  .credit-adjustment-balance-arrow {
+    transform: rotate(90deg);
   }
 }
