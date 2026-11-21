@@ -3,7 +3,6 @@ import {
   Button,
   Checkbox,
   Divider,
-  Empty,
   Input,
   InputNumber,
   List,
@@ -199,26 +198,34 @@ const CreditAdjustmentAction = ({ accountType, account, onUpdated }) => {
         </Space>
 
         <Divider>Recent adjustments</Divider>
-        <List
-          loading={historyLoading}
-          dataSource={history}
-          locale={{ emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="No manual adjustments" /> }}
-          renderItem={(item) => (
-            <List.Item>
-              <List.Item.Meta
-                title={
-                  <Space>
-                    <Tag color={Number(item.credit_delta) > 0 ? "green" : "red"}>
-                      {Number(item.credit_delta) > 0 ? "+" : ""}{item.credit_delta} credits
-                    </Tag>
-                    <Text>{item.balance_before} → {item.balance_after}</Text>
-                  </Space>
-                }
-                description={`${item.reason} · ${item.created_by_name || "Administrator"} · ${new Date(item.created_at).toLocaleString()}`}
-              />
-            </List.Item>
+        <div className="credit-adjustment-history">
+          {historyLoading && (
+            <Text type="secondary">Loading recent adjustments…</Text>
           )}
-        />
+          {!historyLoading && history.length === 0 && (
+            <Text type="secondary">No previous manual adjustments.</Text>
+          )}
+          {!historyLoading && history.length > 0 && (
+            <List
+              dataSource={history}
+              renderItem={(item) => (
+                <List.Item>
+                  <List.Item.Meta
+                    title={
+                      <Space>
+                        <Tag color={Number(item.credit_delta) > 0 ? "green" : "red"}>
+                          {Number(item.credit_delta) > 0 ? "+" : ""}{item.credit_delta} credits
+                        </Tag>
+                        <Text>{item.balance_before} → {item.balance_after}</Text>
+                      </Space>
+                    }
+                    description={`${item.reason} · ${item.created_by_name || "Administrator"} · ${new Date(item.created_at).toLocaleString()}`}
+                  />
+                </List.Item>
+              )}
+            />
+          )}
+        </div>
       </Modal>
     </>
   );
